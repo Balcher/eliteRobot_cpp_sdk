@@ -11,6 +11,15 @@
 class RobotInterface : public RobotState {
    public:
 
+    /// @brief 控制机器人运动
+    /// @param angles 六个轴的旋转角度(弧度制)
+    /// @param acceleration 加速度
+    /// @param velocity 速度
+    /// @param time 时间参数(使用测试数字小就快)
+    /// @param r 
+    void robotMove(const std::vector<double>& angles, double acceleration,
+        double velocity, double time, double r);
+
     /// @brief 获取时间戳
     /// @return 当前时间戳
     uint64_t getTimeStamp();

@@ -1,6 +1,27 @@
 #include "RobotInterface.hpp"
 #include <sstream>
 
+void RobotInterface::robotMove(const std::vector<double>& angles, double acceleration, double velocity, double time, double r)
+{
+    std::ostringstream script;
+
+    script << "def move():\n";
+    script << "\tmovej([";
+
+    // Ìí¼Ó½Ç¶ÈÖµ
+    for (size_t i = 0; i < angles.size(); ++i) {
+        script << angles[i];
+        if (i < angles.size() - 1) {
+            script << ",";
+        }
+    }
+
+    script << "],a=" << acceleration << ",v=" << velocity << ",t=" << time << ",r=" << r << ")\n";
+    script << "end";
+
+    this->sendScript(script.str());
+}
+
 RobotInterface::RobotInterface() {}
 
 RobotInterface::~RobotInterface() {}

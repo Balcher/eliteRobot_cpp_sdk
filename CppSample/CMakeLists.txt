@@ -28,3 +28,20 @@ else()
         elite_robot_state
     )
 endif()
+
+add_executable(mytest
+    ${PROJECT_SOURCE_DIR}/test.cpp
+)
+
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    target_link_libraries(
+        mytest
+        elite_robot_state
+        pthread
+    )
+else()
+    target_link_libraries(
+        mytest
+        elite_robot_state
+    )
+endif()
