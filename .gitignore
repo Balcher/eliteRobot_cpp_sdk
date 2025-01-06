@@ -1,0 +1,36 @@
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+bin/
+obj/
+
+# Visual Studio Code
+.vscode/
+
+# NuGet Packages
+*.nupkg
+*.snupkg
+packages/
+
+# Logs
+*.log
+
+# Others
+*.db
+*.pdb
+*.mdb
+*.cache
+*.zip
+*.tar.gz
+*.tgz
+
+out
