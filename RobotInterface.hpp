@@ -1,4 +1,4 @@
-#ifndef __ROBOT_INTERFACE_HPP__
+ï»¿#ifndef __ROBOT_INTERFACE_HPP__
 #define __ROBOT_INTERFACE_HPP__
 
 #include "RobotState.hpp"
@@ -7,278 +7,278 @@
 #include <string>
 #include <vector>
 
-/// @brief »úÆ÷ÈË½Ó¿ÚÀà£¬¼Ì³Ğ×ÔRobotState
+/// @brief æœºå™¨äººæ¥å£ç±»ï¼Œç»§æ‰¿è‡ªRobotState
 class RobotInterface : public RobotState {
    public:
 
-    /// @brief ¿ØÖÆ»úÆ÷ÈËÔË¶¯
-    /// @param angles Áù¸öÖáµÄĞı×ª½Ç¶È(»¡¶ÈÖÆ)
-    /// @param acceleration ¼ÓËÙ¶È
-    /// @param velocity ËÙ¶È
-    /// @param time Ê±¼ä²ÎÊı(Ê¹ÓÃ²âÊÔÊı×ÖĞ¡¾Í¿ì)
+    /// @brief æ§åˆ¶æœºå™¨äººè¿åŠ¨
+    /// @param angles å…­ä¸ªè½´çš„æ—‹è½¬è§’åº¦(å¼§åº¦åˆ¶)
+    /// @param acceleration åŠ é€Ÿåº¦
+    /// @param velocity é€Ÿåº¦
+    /// @param time æ—¶é—´å‚æ•°(ä½¿ç”¨æµ‹è¯•æ•°å­—å°å°±å¿«)
     /// @param r 
     void robotMove(const std::vector<double>& angles, double acceleration,
         double velocity, double time, double r);
 
-    /// @brief »ñÈ¡Ê±¼ä´Á
-    /// @return µ±Ç°Ê±¼ä´Á
+    /// @brief è·å–æ—¶é—´æˆ³
+    /// @return å½“å‰æ—¶é—´æˆ³
     uint64_t getTimeStamp();
     
-    /// /// @brief ¼ì²é»úÆ÷ÈËÊÇ·ñÍ¨µç
-    /// @return Èç¹û»úÆ÷ÈËÍ¨µç·µ»Ø true,·ñÔò·µ»Øfalse
+    /// /// @brief æ£€æŸ¥æœºå™¨äººæ˜¯å¦é€šç”µ
+    /// @return å¦‚æœæœºå™¨äººé€šç”µè¿”å› true,å¦åˆ™è¿”å›false
     bool isRobotPowerOn();
 
-    /// @brief ¼ì²é»úÆ÷ÈËÊÇ·ñ´¦ÓÚ½ô¼±Í£Ö¹×´Ì¬
-    /// @return Èç¹û»úÆ÷ÈË½ô¼±Í£Ö¹·µ»Øtrue£¬·ñÔò·µ»Øfalse
+    /// @brief æ£€æŸ¥æœºå™¨äººæ˜¯å¦å¤„äºç´§æ€¥åœæ­¢çŠ¶æ€
+    /// @return å¦‚æœæœºå™¨äººç´§æ€¥åœæ­¢è¿”å›trueï¼Œå¦åˆ™è¿”å›false
     bool isEmergencyStopped();
 
-    /// @brief ¼ì²é»úÆ÷ÈËÊÇ·ñ´¦ÓÚ±£»¤Í£Ö¹×´Ì¬
-    /// @return Èç¹û»úÆ÷ÈË±£»¤Í£Ö¹·µ»Øtrue£¬·ñÔò·µ»Øfalse
+    /// @brief æ£€æŸ¥æœºå™¨äººæ˜¯å¦å¤„äºä¿æŠ¤åœæ­¢çŠ¶æ€
+    /// @return å¦‚æœæœºå™¨äººä¿æŠ¤åœæ­¢è¿”å›trueï¼Œå¦åˆ™è¿”å›false
     bool isRobotProtectiveStopped();
 
-    /// @brief ¼ì²é³ÌĞòÊÇ·ñÕıÔÚÔËĞĞ
-    /// @return Èç¹û³ÌĞòÕıÔÚÔËĞĞ·µ»Øtrue£¬·ñÔò·µ»Øfalse
+    /// @brief æ£€æŸ¥ç¨‹åºæ˜¯å¦æ­£åœ¨è¿è¡Œ
+    /// @return å¦‚æœç¨‹åºæ­£åœ¨è¿è¡Œè¿”å›trueï¼Œå¦åˆ™è¿”å›false
     bool isProgramRunning();
 
-    /// @brief ¼ì²é³ÌĞòÊÇ·ñ´¦ÓÚÔİÍ£×´Ì¬
-    /// @return Èç¹û³ÌĞò´¦ÓÚÔİÍ£×´Ì¬·µ»Ø true£¬·ñÔò·µ»Ø false
+    /// @brief æ£€æŸ¥ç¨‹åºæ˜¯å¦å¤„äºæš‚åœçŠ¶æ€
+    /// @return å¦‚æœç¨‹åºå¤„äºæš‚åœçŠ¶æ€è¿”å› trueï¼Œå¦åˆ™è¿”å› false
     bool isProgramPaused();
 
-    /// @brief »úÆ÷ÈËÄ£Ê½Ã¶¾Ù
+    /// @brief æœºå™¨äººæ¨¡å¼æšä¸¾
     enum class RobotMode : uint8_t {
-        ROBOT_MODE_DISCONNECTED = 0,          ///< »úÆ÷ÈË¶Ï¿ªÁ¬½Ó
-        ROBOT_MODE_CONFIRM_SAFETY = 1,        ///< ÕıÔÚÈ·ÈÏ°²È«×´Ì¬
-        ROBOT_MODE_BOOTING = 2,               ///< »úÆ÷ÈËÆô¶¯ÖĞ
-        ROBOT_MODE_POWER_OFF = 3,             ///< »úÆ÷ÈËÒÑ¹Ø»ú
-        ROBOT_MODE_POWER_ON = 4,              ///< »úÆ÷ÈËÒÑÍ¨µç
-        ROBOT_MODE_IDLE = 5,                  ///< »úÆ÷ÈË´¦ÓÚ¿ÕÏĞ×´Ì¬
-        ROBOT_MODE_BACKDRIVE = 6,             ///< »úÆ÷ÈË´¦ÓÚ·´ÏòÇı¶¯Ä£Ê½
-        ROBOT_MODE_RUNNING = 7,               ///< »úÆ÷ÈËÕıÔÚÔËĞĞ³ÌĞò
-        ROBOT_MODE_UPDATING_FIRMWARE = 8,     ///< »úÆ÷ÈËÕıÔÚ¸üĞÂ¹Ì¼ş
-        ROBOT_MODE_WAITING_CALIBRATION = 9    ///< »úÆ÷ÈËÕıÔÚµÈ´ıĞ£×¼
+        ROBOT_MODE_DISCONNECTED = 0,          ///< æœºå™¨äººæ–­å¼€è¿æ¥
+        ROBOT_MODE_CONFIRM_SAFETY = 1,        ///< æ­£åœ¨ç¡®è®¤å®‰å…¨çŠ¶æ€
+        ROBOT_MODE_BOOTING = 2,               ///< æœºå™¨äººå¯åŠ¨ä¸­
+        ROBOT_MODE_POWER_OFF = 3,             ///< æœºå™¨äººå·²å…³æœº
+        ROBOT_MODE_POWER_ON = 4,              ///< æœºå™¨äººå·²é€šç”µ
+        ROBOT_MODE_IDLE = 5,                  ///< æœºå™¨äººå¤„äºç©ºé—²çŠ¶æ€
+        ROBOT_MODE_BACKDRIVE = 6,             ///< æœºå™¨äººå¤„äºåå‘é©±åŠ¨æ¨¡å¼
+        ROBOT_MODE_RUNNING = 7,               ///< æœºå™¨äººæ­£åœ¨è¿è¡Œç¨‹åº
+        ROBOT_MODE_UPDATING_FIRMWARE = 8,     ///< æœºå™¨äººæ­£åœ¨æ›´æ–°å›ºä»¶
+        ROBOT_MODE_WAITING_CALIBRATION = 9    ///< æœºå™¨äººæ­£åœ¨ç­‰å¾…æ ¡å‡†
     };
     RobotMode getRobotMode();
 
-    /// @brief »úÆ÷ÈË¿ØÖÆÄ£Ê½Ã¶¾Ù
+    /// @brief æœºå™¨äººæ§åˆ¶æ¨¡å¼æšä¸¾
     enum class RobotControlMode : uint8_t {
-        CONTROL_MODE_POSITION = 0,            ///< Î»ÖÃ¿ØÖÆÄ£Ê½
-        CONTROL_MODE_TORQUE = 1               ///< Á¦¾Ø¿ØÖÆÄ£Ê½
+        CONTROL_MODE_POSITION = 0,            ///< ä½ç½®æ§åˆ¶æ¨¡å¼
+        CONTROL_MODE_TORQUE = 1               ///< åŠ›çŸ©æ§åˆ¶æ¨¡å¼
 
     };
 
-    /// @brief »ñÈ¡µ±Ç°»úÆ÷ÈË¿ØÖÆÄ£Ê½
-    /// @return µ±Ç°»úÆ÷ÈË¿ØÖÆÄ£Ê½£¬·µ»ØÀàĞÍÎª RobotControlMode
+    /// @brief è·å–å½“å‰æœºå™¨äººæ§åˆ¶æ¨¡å¼
+    /// @return å½“å‰æœºå™¨äººæ§åˆ¶æ¨¡å¼ï¼Œè¿”å›ç±»å‹ä¸º RobotControlMode
     RobotControlMode getRobotControlMode();
 
-    /// @brief »ñÈ¡Ä¿±êËÙ¶È±ÈÀı
-    /// @return Ä¿±êËÙ¶ÈµÄ±ÈÀıÖµ(0.0µ½1.0)
+    /// @brief è·å–ç›®æ ‡é€Ÿåº¦æ¯”ä¾‹
+    /// @return ç›®æ ‡é€Ÿåº¦çš„æ¯”ä¾‹å€¼(0.0åˆ°1.0)
     double getTargetSpeedFraction();
 
-    /// @brief »ñÈ¡ËÙ¶ÈËõ·ÅÒò×Ó
-    /// @return µ±Ç°ËÙ¶ÈËõ·ÅÒò×Ó
+    /// @brief è·å–é€Ÿåº¦ç¼©æ”¾å› å­
+    /// @return å½“å‰é€Ÿåº¦ç¼©æ”¾å› å­
     double getSpeedScaling();
 
-    /// @brief »ñÈ¡Ä¿±êËÙ¶ÈÏŞÖÆ
-    /// @return Ä¿±êËÙ¶ÈµÄÏŞÖÆÖµ
+    /// @brief è·å–ç›®æ ‡é€Ÿåº¦é™åˆ¶
+    /// @return ç›®æ ‡é€Ÿåº¦çš„é™åˆ¶å€¼
     double getTargetSpeedFractionLimit();
 
-    /// @brief »úÆ÷ÈËËÙ¶ÈÄ£Ê½Ã¶¾Ù
+    /// @brief æœºå™¨äººé€Ÿåº¦æ¨¡å¼æšä¸¾
     enum class RobotSpeedMode : uint8_t {
-        UNRESTRICTED = 0,                       ///< ÎŞÏŞÖÆËÙ¶ÈÄ£Ê½
-        MANUAL_HIGH_SPEED = 1,                  ///< ÊÖ¶¯¸ßËÙ¶ÈÄ£Ê½
-        MANUAL_REDUCED_SPEED = 2                ///< ÊÖ¶¯½µµÍËÙ¶ÈÄ£Ê½
+        UNRESTRICTED = 0,                       ///< æ— é™åˆ¶é€Ÿåº¦æ¨¡å¼
+        MANUAL_HIGH_SPEED = 1,                  ///< æ‰‹åŠ¨é«˜é€Ÿåº¦æ¨¡å¼
+        MANUAL_REDUCED_SPEED = 2                ///< æ‰‹åŠ¨é™ä½é€Ÿåº¦æ¨¡å¼
 
     };
 
-    /// @brief »ñÈ¡µ±Ç°»úÆ÷ÈËËÙ¶ÈÄ£Ê½
-    /// @return µ±Ç°»úÆ÷ÈËËÙ¶ÈÄ£Ê½£¬·µ»ØÀàĞÍÎª RobotSpeedMode
+    /// @brief è·å–å½“å‰æœºå™¨äººé€Ÿåº¦æ¨¡å¼
+    /// @return å½“å‰æœºå™¨äººé€Ÿåº¦æ¨¡å¼ï¼Œè¿”å›ç±»å‹ä¸º RobotSpeedMode
     RobotSpeedMode getRobotSpeedMode();
 
-    /// @brief ¼ì²é»úÆ÷ÈËÏµÍ³ÊÇ·ñ´¦ÓÚ±¨¾¯×´Ì¬
-    /// @return Èç¹û»úÆ÷ÈËÏµÍ³±¨¾¯·µ»Øtrue£¬·ñÔò·µ»Øfalse
+    /// @brief æ£€æŸ¥æœºå™¨äººç³»ç»Ÿæ˜¯å¦å¤„äºæŠ¥è­¦çŠ¶æ€
+    /// @return å¦‚æœæœºå™¨äººç³»ç»ŸæŠ¥è­¦è¿”å›trueï¼Œå¦åˆ™è¿”å›false
     bool isRobotSystemInAlarm();
     
-    /// @brief ¼ì²é»úÆ÷ÈËÊÇ·ñ´¦ÓÚ´ò°üÄ£Ê½
-    /// @return Èç¹û»úÆ÷ÈË´¦ÓÚ´ò°üÄ£Ê½·µ»Øtrue£¬·ñÔò·µ»Øfalse
+    /// @brief æ£€æŸ¥æœºå™¨äººæ˜¯å¦å¤„äºæ‰“åŒ…æ¨¡å¼
+    /// @return å¦‚æœæœºå™¨äººå¤„äºæ‰“åŒ…æ¨¡å¼è¿”å›trueï¼Œå¦åˆ™è¿”å›false
     bool isInPackageMode();
 
-    // »ñÈ¡¹Ø½ÚÏà¹Ø×´Ì¬ĞÅÏ¢
-    std::vector<double> getJointActualPos();              ///< »ñÈ¡¹Ø½ÚÊµ¼ÊÎ»ÖÃ
-    std::vector<double> getJointTargetPos();              ///< »ñÈ¡¹Ø½ÚÄ¿±êÎ»ÖÃ
-    std::vector<double> getJointActualVelocity();         ///< »ñÈ¡¹Ø½ÚÊµ¼ÊËÙ¶È
-    std::vector<int32_t> getJointTargetPluse();           ///< »ñÈ¡¹Ø½ÚÄ¿±êÂö³åÊı
-    std::vector<int32_t> getJointActualPluse();           ///< »ñÈ¡¹Ø½ÚÊµ¼ÊÂö³åÊı
-    std::vector<int32_t> getJointZeroPluse();             ///< »ñÈ¡¹Ø½ÚÁãµãÂö³åÊı
-    std::vector<float> getJointCurrent();                 ///< »ñÈ¡¹Ø½ÚµçÁ÷
-    std::vector<float> getJointVoltage();                 ///< »ñÈ¡¹Ø½ÚµçÑ¹
-    std::vector<float> getJointTemperature();             ///< »ñÈ¡¹Ø½ÚÎÂ¶È
-    std::vector<float> getJointTorques();                 ///< »ñÈ¡¹Ø½ÚÅ¤¾Ø
+    // è·å–å…³èŠ‚ç›¸å…³çŠ¶æ€ä¿¡æ¯
+    std::vector<double> getJointActualPos();              ///< è·å–å…³èŠ‚å®é™…ä½ç½®
+    std::vector<double> getJointTargetPos();              ///< è·å–å…³èŠ‚ç›®æ ‡ä½ç½®
+    std::vector<double> getJointActualVelocity();         ///< è·å–å…³èŠ‚å®é™…é€Ÿåº¦
+    std::vector<int32_t> getJointTargetPluse();           ///< è·å–å…³èŠ‚ç›®æ ‡è„‰å†²æ•°
+    std::vector<int32_t> getJointActualPluse();           ///< è·å–å…³èŠ‚å®é™…è„‰å†²æ•°
+    std::vector<int32_t> getJointZeroPluse();             ///< è·å–å…³èŠ‚é›¶ç‚¹è„‰å†²æ•°
+    std::vector<float> getJointCurrent();                 ///< è·å–å…³èŠ‚ç”µæµ
+    std::vector<float> getJointVoltage();                 ///< è·å–å…³èŠ‚ç”µå‹
+    std::vector<float> getJointTemperature();             ///< è·å–å…³èŠ‚æ¸©åº¦
+    std::vector<float> getJointTorques();                 ///< è·å–å…³èŠ‚æ‰­çŸ©
 
-    /// @brief Ã¶¾Ù¶¨Òå£º¹Ø½ÚÄ£Ê½£¨joint mode£©
+    /// @brief æšä¸¾å®šä¹‰ï¼šå…³èŠ‚æ¨¡å¼ï¼ˆjoint modeï¼‰
     enum class JointMode : uint8_t {
-        MODE_RESET = 235,                                 ///< ¸´Î»Ä£Ê½
-        MODE_SHUTTING_DOWN = 236,                         ///< ¹Ø»úÄ£Ê½
-        MODE_BACKDRIVE = 238,                             ///< ·´Çı¶¯Ä£Ê½
-        MODE_POWER_OFF = 239,                             ///< ¶ÏµçÄ£Ê½
-        MODE_READY_FOR_POWEROFF = 240,                    ///< ×¼±¸¶ÏµçÄ£Ê½
-        MODE_NOT_RESPONDING = 245,                        ///< ²»ÏìÓ¦Ä£Ê½
-        MODE_MOTOR_INITIALISATION = 246,                  ///< µç»ú³õÊ¼»¯Ä£Ê½
-        MODE_BOOTING = 247,                               ///< Æô¶¯Ä£Ê½
-        MODE_BOOTLOADER = 249,                            ///< Òıµ¼³ÌĞòÄ£Ê½
-        MODE_VIOLATION = 251,                             ///< Î¥¹æÄ£Ê½
-        MODE_FAULT = 252,                                 ///< ¹ÊÕÏÄ£Ê½
-        MODE_RUNNING = 253,                               ///< ÔËĞĞÄ£Ê½
-        MODE_IDLE = 255                                   ///< ¿ÕÏĞÄ£Ê½
+        MODE_RESET = 235,                                 ///< å¤ä½æ¨¡å¼
+        MODE_SHUTTING_DOWN = 236,                         ///< å…³æœºæ¨¡å¼
+        MODE_BACKDRIVE = 238,                             ///< åé©±åŠ¨æ¨¡å¼
+        MODE_POWER_OFF = 239,                             ///< æ–­ç”µæ¨¡å¼
+        MODE_READY_FOR_POWEROFF = 240,                    ///< å‡†å¤‡æ–­ç”µæ¨¡å¼
+        MODE_NOT_RESPONDING = 245,                        ///< ä¸å“åº”æ¨¡å¼
+        MODE_MOTOR_INITIALISATION = 246,                  ///< ç”µæœºåˆå§‹åŒ–æ¨¡å¼
+        MODE_BOOTING = 247,                               ///< å¯åŠ¨æ¨¡å¼
+        MODE_BOOTLOADER = 249,                            ///< å¼•å¯¼ç¨‹åºæ¨¡å¼
+        MODE_VIOLATION = 251,                             ///< è¿è§„æ¨¡å¼
+        MODE_FAULT = 252,                                 ///< æ•…éšœæ¨¡å¼
+        MODE_RUNNING = 253,                               ///< è¿è¡Œæ¨¡å¼
+        MODE_IDLE = 255                                   ///< ç©ºé—²æ¨¡å¼
 
     };
-    std::vector<JointMode> getJointMode();                ///< »ñÈ¡¹Ø½Ú¹¤×÷Ä£Ê½
+    std::vector<JointMode> getJointMode();                ///< è·å–å…³èŠ‚å·¥ä½œæ¨¡å¼
 
-    std::vector<double> getTcpPosition();                 ///< »ñÈ¡TCPÎ»ÖÃ
-    std::vector<double> getTcpOffset();                   ///< »ñÈ¡TCPÆ«ÒÆÁ¿
+    std::vector<double> getTcpPosition();                 ///< è·å–TCPä½ç½®
+    std::vector<double> getTcpOffset();                   ///< è·å–TCPåç§»é‡
 
-    std::vector<double> getLimitMinJoint();               ///< »ñÈ¡¹Ø½Ú×îĞ¡ÏŞÖÆ
-    std::vector<double> getLimitMaxJoint();               ///< »ñÈ¡¹Ø½Ú×î´óÏŞÖÆ
-    std::vector<double> getMaxVelocityJoint();            ///< »ñÈ¡¹Ø½Ú×î´óËÙ¶È
-    std::vector<double> getMaxAccJoint();                 ///< »ñÈ¡¹Ø½Ú×î´ó¼ÓËÙ¶È
-    double getDefaultVelocityJoint();                     ///< »ñÈ¡Ä¬ÈÏ¹Ø½ÚËÙ¶È
-    double getDefaultAccJoint();                          ///< »ñÈ¡Ä¬ÈÏ¹Ø½Ú¼ÓËÙ¶È
-    double getDefaultToolVelocity();                      ///< »ñÈ¡Ä¬ÈÏ¹¤¾ßËÙ¶È
-    double getDefaultToolAcc();                           ///< »ñÈ¡Ä¬ÈÏ¹¤¾ß¼ÓËÙ¶È
-    double getEqRadius();                                 ///< »ñÈ¡µÈĞ§°ë¾¶
-    std::vector<double> getDhAJoint();                    ///< »ñÈ¡DH²ÎÊı a_i
-    std::vector<double> getDhDJoint();                    ///< »ñÈ¡DH²ÎÊı d_i
-    std::vector<double> getDhAlphaJoint();                ///< »ñÈ¡DH²ÎÊı \alpha_i
+    std::vector<double> getLimitMinJoint();               ///< è·å–å…³èŠ‚æœ€å°é™åˆ¶
+    std::vector<double> getLimitMaxJoint();               ///< è·å–å…³èŠ‚æœ€å¤§é™åˆ¶
+    std::vector<double> getMaxVelocityJoint();            ///< è·å–å…³èŠ‚æœ€å¤§é€Ÿåº¦
+    std::vector<double> getMaxAccJoint();                 ///< è·å–å…³èŠ‚æœ€å¤§åŠ é€Ÿåº¦
+    double getDefaultVelocityJoint();                     ///< è·å–é»˜è®¤å…³èŠ‚é€Ÿåº¦
+    double getDefaultAccJoint();                          ///< è·å–é»˜è®¤å…³èŠ‚åŠ é€Ÿåº¦
+    double getDefaultToolVelocity();                      ///< è·å–é»˜è®¤å·¥å…·é€Ÿåº¦
+    double getDefaultToolAcc();                           ///< è·å–é»˜è®¤å·¥å…·åŠ é€Ÿåº¦
+    double getEqRadius();                                 ///< è·å–ç­‰æ•ˆåŠå¾„
+    std::vector<double> getDhAJoint();                    ///< è·å–DHå‚æ•° a_i
+    std::vector<double> getDhDJoint();                    ///< è·å–DHå‚æ•° d_i
+    std::vector<double> getDhAlphaJoint();                ///< è·å–DHå‚æ•° \alpha_i
     
-    // »ñÈ¡Ó²¼ş°æ±¾ÓëÀàĞÍĞÅÏ¢
-    uint32_t getBoardVersion();                           ///< »ñÈ¡°å¿¨°æ±¾
-    uint32_t getControlBoxType();                         ///< »ñÈ¡»úÆ÷ÈËÀàĞÍ
+    // è·å–ç¡¬ä»¶ç‰ˆæœ¬ä¸ç±»å‹ä¿¡æ¯
+    uint32_t getBoardVersion();                           ///< è·å–æ¿å¡ç‰ˆæœ¬
+    uint32_t getControlBoxType();                         ///< è·å–æœºå™¨äººç±»å‹
 
-    /// @brief Ã¶¾ÙÀàĞÍ£º»úÆ÷ÈËÀàĞÍ
+    /// @brief æšä¸¾ç±»å‹ï¼šæœºå™¨äººç±»å‹
     enum class RobotType : uint32_t {
-        ROBOT_TYPE_6203 = 6203,                          ///< »úÆ÷ÈËĞÍºÅ 6203
-        ROBOT_TYPE_6206 = 6206,                          ///< »úÆ÷ÈËĞÍºÅ 6206
-        ROBOT_TYPE_6212 = 6212                           ///< »úÆ÷ÈËĞÍºÅ 6212
+        ROBOT_TYPE_6203 = 6203,                          ///< æœºå™¨äººå‹å· 6203
+        ROBOT_TYPE_6206 = 6206,                          ///< æœºå™¨äººå‹å· 6206
+        ROBOT_TYPE_6212 = 6212                           ///< æœºå™¨äººå‹å· 6212
 
     };
     RobotType getRobotType();
 
-    /// @brief Ã¶¾Ù¶¨Òå£º»úÆ÷ÈË½á¹¹
+    /// @brief æšä¸¾å®šä¹‰ï¼šæœºå™¨äººç»“æ„
     enum class RobotStruct : uint32_t {
-        ROBOT_STRUCTURE_TYPE_60 = 60,                    ///< ½á¹¹ÀàĞÍ 60
-        ROBOT_STRUCTURE_TYPE_62 = 62,                    ///< ½á¹¹ÀàĞÍ 62
-        ROBOT_STRUCTURE_TYPE_70 = 70                     ///< ½á¹¹ÀàĞÍ 70
+        ROBOT_STRUCTURE_TYPE_60 = 60,                    ///< ç»“æ„ç±»å‹ 60
+        ROBOT_STRUCTURE_TYPE_62 = 62,                    ///< ç»“æ„ç±»å‹ 62
+        ROBOT_STRUCTURE_TYPE_70 = 70                     ///< ç»“æ„ç±»å‹ 70
 
     };
     RobotStruct getRobotStruct();
 
-    std::vector<bool> getStandardDigitalInput();                        ///< »ñÈ¡±ê×¼Êı×ÖÊäÈë
-    std::vector<bool> getStandardDigitalOutput();                       ///< »ñÈ¡±ê×¼Êı×ÖÊä³ö
-    std::vector<bool> getConfigureDigitalInput();                       ///< »ñÈ¡ÅäÖÃÊı×ÖÊäÈë
-    std::vector<bool> getConfigureDigitalOutput();                      ///< »ñÈ¡ÅäÖÃÊı×ÖÊä³ö
-    std::vector<bool> getToolDigitalInput();                            ///< »ñÈ¡¹¤¾ßÊı×ÖÊäÈë
-    std::vector<bool> getToolDigitalOutput();                           ///< »ñÈ¡¹¤¾ßÊı×ÖÊä³ö
+    std::vector<bool> getStandardDigitalInput();                        ///< è·å–æ ‡å‡†æ•°å­—è¾“å…¥
+    std::vector<bool> getStandardDigitalOutput();                       ///< è·å–æ ‡å‡†æ•°å­—è¾“å‡º
+    std::vector<bool> getConfigureDigitalInput();                       ///< è·å–é…ç½®æ•°å­—è¾“å…¥
+    std::vector<bool> getConfigureDigitalOutput();                      ///< è·å–é…ç½®æ•°å­—è¾“å‡º
+    std::vector<bool> getToolDigitalInput();                            ///< è·å–å·¥å…·æ•°å­—è¾“å…¥
+    std::vector<bool> getToolDigitalOutput();                           ///< è·å–å·¥å…·æ•°å­—è¾“å‡º
     
     enum class AnalogMode : uint8_t { CURRENT = 0, VOLTAGE = 1 };       ///< 
     
-    std::vector<AnalogMode> getStandardAnalogOutputMode();              ///< »ñÈ¡±ê×¼Ä£ÄâÊä³öÄ£Ê½
-    std::vector<AnalogMode> getStandardAnalogInputMode();               ///< »ñÈ¡±ê×¼Ä£ÄâÊäÈëÄ£Ê½
-    AnalogMode getToolAnalogOutputMode();                               ///< »ñÈ¡¹¤¾ßÄ£ÄâÊä³öÄ£Ê½
-    AnalogMode getToolAnalogInputMode();                                ///< »ñÈ¡¹¤¾ßÄ£ÄâÊäÈëÄ£Ê½
-    std::vector<double> getStandardAnalogOutputValue();                 ///< »ñÈ¡±ê×¼Ä£ÄâÊä³öÖµ
-    std::vector<double> getStandardAnalogInputValue();                  ///< »ñÈ¡±ê×¼Ä£ÄâÊäÈëÖµ
-    double getToolAnalogOutputValue();                                  ///< »ñÈ¡¹¤¾ßÄ£ÄâÊä³öÖµ
-    double getToolAnalogInputValue();                                   ///< »ñÈ¡¹¤¾ßÄ£ÄâÊäÈëÖµ
+    std::vector<AnalogMode> getStandardAnalogOutputMode();              ///< è·å–æ ‡å‡†æ¨¡æ‹Ÿè¾“å‡ºæ¨¡å¼
+    std::vector<AnalogMode> getStandardAnalogInputMode();               ///< è·å–æ ‡å‡†æ¨¡æ‹Ÿè¾“å…¥æ¨¡å¼
+    AnalogMode getToolAnalogOutputMode();                               ///< è·å–å·¥å…·æ¨¡æ‹Ÿè¾“å‡ºæ¨¡å¼
+    AnalogMode getToolAnalogInputMode();                                ///< è·å–å·¥å…·æ¨¡æ‹Ÿè¾“å…¥æ¨¡å¼
+    std::vector<double> getStandardAnalogOutputValue();                 ///< è·å–æ ‡å‡†æ¨¡æ‹Ÿè¾“å‡ºå€¼
+    std::vector<double> getStandardAnalogInputValue();                  ///< è·å–æ ‡å‡†æ¨¡æ‹Ÿè¾“å…¥å€¼
+    double getToolAnalogOutputValue();                                  ///< è·å–å·¥å…·æ¨¡æ‹Ÿè¾“å‡ºå€¼
+    double getToolAnalogInputValue();                                   ///< è·å–å·¥å…·æ¨¡æ‹Ÿè¾“å…¥å€¼
     
-    // »ñÈ¡»úÆ÷ÈËµçÆø²ÎÊı
-    float getBoardTemperature();                                        ///< »ñÈ¡°å¿¨ÎÂ¶È
-    float getRobotVoltage();                                            ///< »ñÈ¡»úÆ÷ÈËµçÑ¹
-    float getRobotCurrent();                                            ///< »ñÈ¡»úÆ÷ÈËµçÁ÷
-    float getIOCurrent();                                               ///< »ñÈ¡IOµçÁ÷
+    // è·å–æœºå™¨äººç”µæ°”å‚æ•°
+    float getBoardTemperature();                                        ///< è·å–æ¿å¡æ¸©åº¦
+    float getRobotVoltage();                                            ///< è·å–æœºå™¨äººç”µå‹
+    float getRobotCurrent();                                            ///< è·å–æœºå™¨äººç”µæµ
+    float getIOCurrent();                                               ///< è·å–IOç”µæµ
 
-    // Ã¶¾Ù¶¨Òå£º°²È«Ä£Ê½
+    // æšä¸¾å®šä¹‰ï¼šå®‰å…¨æ¨¡å¼
     enum class SafetyMode : uint8_t {
-        SAFETY_MODE_NORMAL = 1,                                         ///< Õı³£Ä£Ê½
-        SAFETY_MODE_REDUCED = 2,                                        ///< ½µµÍÄ£Ê½
-        SAFETY_MODE_PROTECTIVE_STOP = 3,                                ///< ±£»¤Í£Ö¹Ä£Ê½
-        SAFETY_MODE_RECOVERY = 4,                                       ///< »Ö¸´Ä£Ê½
-        SAFETY_MODE_SAFEGUARD_STOP = 5,                                 ///< °²È«Í£Ö¹Ä£Ê½
-        SAFETY_MODE_SYSTEM_EMERGENCY_STOP = 6,                          ///< ÏµÍ³½ô¼±Í£Ö¹Ä£Ê½
-        SAFETY_MODE_ROBOT_EMERGENCY_STOP = 7,                           ///< »úÆ÷ÈË½ô¼±Í£Ö¹Ä£Ê½
-        SAFETY_MODE_VIOLATION = 8,                                      ///< Î¥¹æÄ£Ê½
-        SAFETY_MODE_FAULT = 9,                                          ///< ¹ÊÕÏÄ£Ê½
-        SAFETY_MODE_VALIDATE_JOINT_ID = 10,                             ///< ÑéÖ¤¹Ø½ÚID
-        SAFETY_MODE_UNDEFINED_SAFETY_MODE = 11,                         ///< Î´¶¨ÒåµÄ°²È«Ä£Ê½
-        SAFETY_MODE_AUTOMATIC_MODE_SAFEGUARD_STOP = 12,                 ///< ×Ô¶¯Ä£Ê½°²È«Í£Ö¹
-        SAFETY_MODE_SYSTEM_THREE_POSITION_ENABLING_STOP = 13            ///< ÏµÍ³ÈıÎ»ÖÃÆôÓÃÍ£Ö¹
+        SAFETY_MODE_NORMAL = 1,                                         ///< æ­£å¸¸æ¨¡å¼
+        SAFETY_MODE_REDUCED = 2,                                        ///< é™ä½æ¨¡å¼
+        SAFETY_MODE_PROTECTIVE_STOP = 3,                                ///< ä¿æŠ¤åœæ­¢æ¨¡å¼
+        SAFETY_MODE_RECOVERY = 4,                                       ///< æ¢å¤æ¨¡å¼
+        SAFETY_MODE_SAFEGUARD_STOP = 5,                                 ///< å®‰å…¨åœæ­¢æ¨¡å¼
+        SAFETY_MODE_SYSTEM_EMERGENCY_STOP = 6,                          ///< ç³»ç»Ÿç´§æ€¥åœæ­¢æ¨¡å¼
+        SAFETY_MODE_ROBOT_EMERGENCY_STOP = 7,                           ///< æœºå™¨äººç´§æ€¥åœæ­¢æ¨¡å¼
+        SAFETY_MODE_VIOLATION = 8,                                      ///< è¿è§„æ¨¡å¼
+        SAFETY_MODE_FAULT = 9,                                          ///< æ•…éšœæ¨¡å¼
+        SAFETY_MODE_VALIDATE_JOINT_ID = 10,                             ///< éªŒè¯å…³èŠ‚ID
+        SAFETY_MODE_UNDEFINED_SAFETY_MODE = 11,                         ///< æœªå®šä¹‰çš„å®‰å…¨æ¨¡å¼
+        SAFETY_MODE_AUTOMATIC_MODE_SAFEGUARD_STOP = 12,                 ///< è‡ªåŠ¨æ¨¡å¼å®‰å…¨åœæ­¢
+        SAFETY_MODE_SYSTEM_THREE_POSITION_ENABLING_STOP = 13            ///< ç³»ç»Ÿä¸‰ä½ç½®å¯ç”¨åœæ­¢
     };
     
-    // »ñÈ¡°²È«Ä£Ê½
-    SafetyMode getBordSafeMode();                                       ///< »ñÈ¡Ö÷°å°²È«Ä£Ê½
-    bool isRobotInReducedMode();                                        ///< ÅĞ¶Ï»úÆ÷ÈËÊÇ·ñ´¦ÓÚ½µµÍÄ£Ê½
-    bool getOperationalModeSelectorInput();                             ///< »ñÈ¡²Ù×÷Ä£Ê½Ñ¡ÔñÆ÷ÊäÈë
-    bool getThreepositionEnablingDeviceInput();                         ///< »ñÈ¡ÈıÎ»ÖÃÆô¶¯Éè±¸ÊäÈë
-    SafetyMode getMasterboardSafetyMode();                              ///< »ñÈ¡Ö÷°å°²È«Ä£Ê½
+    // è·å–å®‰å…¨æ¨¡å¼
+    SafetyMode getBordSafeMode();                                       ///< è·å–ä¸»æ¿å®‰å…¨æ¨¡å¼
+    bool isRobotInReducedMode();                                        ///< åˆ¤æ–­æœºå™¨äººæ˜¯å¦å¤„äºé™ä½æ¨¡å¼
+    bool getOperationalModeSelectorInput();                             ///< è·å–æ“ä½œæ¨¡å¼é€‰æ‹©å™¨è¾“å…¥
+    bool getThreepositionEnablingDeviceInput();                         ///< è·å–ä¸‰ä½ç½®å¯åŠ¨è®¾å¤‡è¾“å…¥
+    SafetyMode getMasterboardSafetyMode();                              ///< è·å–ä¸»æ¿å®‰å…¨æ¨¡å¼
 
-    // »ñÈ¡×ÔÓÉÇı¶¯Ïà¹Ø×´Ì¬
-    bool isFreedriveButtonPressed();                                    ///< ÅĞ¶Ï×ÔÓÉÇı¶¯°´Å¥ÊÇ·ñ°´ÏÂ
-    bool isFreedriveIOEnabled();                                        ///< ÅĞ¶Ï×ÔÓÉÇı¶¯IOÊÇ·ñÆôÓÃ
-    bool isDynamicCollisionDetectEnabled();                             ///< ÅĞ¶Ï¶¯Ì¬Åö×²¼ì²âÊÇ·ñÆôÓÃ
+    // è·å–è‡ªç”±é©±åŠ¨ç›¸å…³çŠ¶æ€
+    bool isFreedriveButtonPressed();                                    ///< åˆ¤æ–­è‡ªç”±é©±åŠ¨æŒ‰é’®æ˜¯å¦æŒ‰ä¸‹
+    bool isFreedriveIOEnabled();                                        ///< åˆ¤æ–­è‡ªç”±é©±åŠ¨IOæ˜¯å¦å¯ç”¨
+    bool isDynamicCollisionDetectEnabled();                             ///< åˆ¤æ–­åŠ¨æ€ç¢°æ’æ£€æµ‹æ˜¯å¦å¯ç”¨
 
-    // »ñÈ¡¹¤¾ßÏà¹ØµÄµçÆø²ÎÊı
-    float getToolVoltage();                                             ///< »ñÈ¡¹¤¾ßµÄµçÑ¹Öµ
-    float getToolCurrent();                                             ///< »ñÈ¡¹¤¾ßµÄµçÁ÷Öµ
+    // è·å–å·¥å…·ç›¸å…³çš„ç”µæ°”å‚æ•°
+    float getToolVoltage();                                             ///< è·å–å·¥å…·çš„ç”µå‹å€¼
+    float getToolCurrent();                                             ///< è·å–å·¥å…·çš„ç”µæµå€¼
 
-    // Ã¶¾Ù¶¨Òå£º¹¤¾ßÊä³öµçÑ¹µÈ¼¶
+    // æšä¸¾å®šä¹‰ï¼šå·¥å…·è¾“å‡ºç”µå‹ç­‰çº§
     enum class ToolOutputVoltage : uint8_t { 
-        VOLTAGE_0_LEVEL = 0,                                            ///< ¹¤¾ßÊä³öµçÑ¹Îª 0v
-        VOLTAGE_12_LEVEL = 12,                                          ///< ¹¤¾ßÊä³öµçÑ¹Îª 12v
-        VOLTAGE_24_LEVEL = 24                                           ///< ¹¤¾ßÊä³öµçÑ¹Îª 24v
+        VOLTAGE_0_LEVEL = 0,                                            ///< å·¥å…·è¾“å‡ºç”µå‹ä¸º 0v
+        VOLTAGE_12_LEVEL = 12,                                          ///< å·¥å…·è¾“å‡ºç”µå‹ä¸º 12v
+        VOLTAGE_24_LEVEL = 24                                           ///< å·¥å…·è¾“å‡ºç”µå‹ä¸º 24v
     };
 
-    // »ñÈ¡¹¤¾ßµçÆø×´Ì¬
-    ToolOutputVoltage getToolOutputVoltage();                           ///< »ñÈ¡¹¤¾ßµÄÊä³öµçÑ¹µÈ¼¶
-    float getToolTemperature();                                         ///< »ñÈ¡¹¤¾ßµÄÎÂ¶È
+    // è·å–å·¥å…·ç”µæ°”çŠ¶æ€
+    ToolOutputVoltage getToolOutputVoltage();                           ///< è·å–å·¥å…·çš„è¾“å‡ºç”µå‹ç­‰çº§
+    float getToolTemperature();                                         ///< è·å–å·¥å…·çš„æ¸©åº¦
 
-    // ¶¨Òå¹Ø½ÚÄ£Ê½£¨JointMode£©×÷Îª¹¤¾ßÄ£Ê½(ToolMode)µÄ±ğÃû
+    // å®šä¹‰å…³èŠ‚æ¨¡å¼ï¼ˆJointModeï¼‰ä½œä¸ºå·¥å…·æ¨¡å¼(ToolMode)çš„åˆ«å
     typedef JointMode ToolMode;                                         
-    ToolMode getToolMode();                                             ///< ·µ»Ø¹¤¾ßµÄµ±Ç°Ä£Ê½
+    ToolMode getToolMode();                                             ///< è¿”å›å·¥å…·çš„å½“å‰æ¨¡å¼
 
-    // »ñÈ¡°²È«Ïà¹ØµÄĞÅÏ¢
-    uint32_t getSafetyCRCNum();                                         ///< »ñÈ¡°²È«Ïà¹ØµÄCRCĞ£ÑéÂë
+    // è·å–å®‰å…¨ç›¸å…³çš„ä¿¡æ¯
+    uint32_t getSafetyCRCNum();                                         ///< è·å–å®‰å…¨ç›¸å…³çš„CRCæ ¡éªŒç 
     
-    // Ã¶¾Ù¶¨Òå£º°²È«²Ù×÷Ä£Ê½
+    // æšä¸¾å®šä¹‰ï¼šå®‰å…¨æ“ä½œæ¨¡å¼
     enum class SafeOptMode : int8_t { 
-        NONE = -1,                                                      ///< ÎŞ°²È«²Ù×÷Ä£Ê½
-        AUTOMATIC = 0,                                                  ///< ×Ô¶¯°²È«Ä£Ê½
-        MANUAL = 1                                                      ///< ÊÖ¶¯°²È«Ä£Ê½
+        NONE = -1,                                                      ///< æ— å®‰å…¨æ“ä½œæ¨¡å¼
+        AUTOMATIC = 0,                                                  ///< è‡ªåŠ¨å®‰å…¨æ¨¡å¼
+        MANUAL = 1                                                      ///< æ‰‹åŠ¨å®‰å…¨æ¨¡å¼
     };
     
-    // »ñÈ¡µ±Ç°µÄ°²È«²Ù×÷Ä£Ê½
-    SafeOptMode getSafetyOperationalMode();                             ///< ·µ»Ø»úÆ÷ÈËµ±Ç°µÄ°²È«²Ù×÷Ä£Ê½
+    // è·å–å½“å‰çš„å®‰å…¨æ“ä½œæ¨¡å¼
+    SafeOptMode getSafetyOperationalMode();                             ///< è¿”å›æœºå™¨äººå½“å‰çš„å®‰å…¨æ“ä½œæ¨¡å¼
 
-    // »ñÈ¡Öâ²¿Ïà¹Ø²ÎÊı
-    std::vector<double> getCurrentElbowPos();                           ///< »ñÈ¡µ±Ç°Öâ²¿Î»ÖÃµÄ×ø±ê(¿ÉÄÜÊÇ 3D ×ø±ê)
-    double getElbowRadius();                                            ///< »ñÈ¡Öâ²¿µÄ°ë¾¶ĞÅÏ¢
+    // è·å–è‚˜éƒ¨ç›¸å…³å‚æ•°
+    std::vector<double> getCurrentElbowPos();                           ///< è·å–å½“å‰è‚˜éƒ¨ä½ç½®çš„åæ ‡(å¯èƒ½æ˜¯ 3D åæ ‡)
+    double getElbowRadius();                                            ///< è·å–è‚˜éƒ¨çš„åŠå¾„ä¿¡æ¯
 
-    // ¹¤¾ß RS485 ½Ó¿ÚÏà¹Ø¹¦ÄÜ
-    bool isToolRS485Enable();                                           ///< ÅĞ¶Ï¹¤¾ßµÄ RS485 ½Ó¿ÚÊÇ·ñÆôÓÃ
-    uint32_t getToolRS485Baudrate();                                    ///< »ñÈ¡¹¤¾ß RS485 µÄ²¨ÌØÂÊ
-    uint32_t getToolRS485Parity();                                      ///< »ñÈ¡¹¤¾ß RS485 µÄĞ£ÑéÎ»ÉèÖÃ
-    uint32_t getToolRS485Stopbits();                                    ///< »ñÈ¡¹¤¾ß RS485 µÄÍ£Ö¹Î»ÉèÖÃ
-    bool isToolRS485ModbusMode();                                       ///< ÅĞ¶Ï¹¤¾ßÊÇ·ñ´¦ÓÚ Modbus Ä£Ê½
+    // å·¥å…· RS485 æ¥å£ç›¸å…³åŠŸèƒ½
+    bool isToolRS485Enable();                                           ///< åˆ¤æ–­å·¥å…·çš„ RS485 æ¥å£æ˜¯å¦å¯ç”¨
+    uint32_t getToolRS485Baudrate();                                    ///< è·å–å·¥å…· RS485 çš„æ³¢ç‰¹ç‡
+    uint32_t getToolRS485Parity();                                      ///< è·å–å·¥å…· RS485 çš„æ ¡éªŒä½è®¾ç½®
+    uint32_t getToolRS485Stopbits();                                    ///< è·å–å·¥å…· RS485 çš„åœæ­¢ä½è®¾ç½®
+    bool isToolRS485ModbusMode();                                       ///< åˆ¤æ–­å·¥å…·æ˜¯å¦å¤„äº Modbus æ¨¡å¼
 
-    // Ã¶¾Ù¶¨Òå£º¹¤¾ß RS485 µÄÊ¹ÓÃÄ£Ê½
+    // æšä¸¾å®šä¹‰ï¼šå·¥å…· RS485 çš„ä½¿ç”¨æ¨¡å¼
     enum class ToolRS485Usage : uint8_t { 
-        SCRIPT_MODE,                                                    ///< RS485 ½Å±¾
-        DAEMON_MODE                                                     ///< RS485 ÊØ»¤½ø³ÌÄ£Ê½
+        SCRIPT_MODE,                                                    ///< RS485 è„šæœ¬
+        DAEMON_MODE                                                     ///< RS485 å®ˆæŠ¤è¿›ç¨‹æ¨¡å¼
     };
     ToolRS485Usage getToolRS485Usage();
     
-    // Ä£°åº¯Êı£º´Ó×´Ì¬ÁĞ±íÖĞ»ñÈ¡Ö¸¶¨ÀàĞÍµÄ×´Ì¬Öµ
+    // æ¨¡æ¿å‡½æ•°ï¼šä»çŠ¶æ€åˆ—è¡¨ä¸­è·å–æŒ‡å®šç±»å‹çš„çŠ¶æ€å€¼
     template <typename T>
     std::vector<T> getStatesVector(const char* state_list[], int list_size) {
         std::vector<T> result;
-        // ±éÀú×´Ì¬ÁĞ±í£¬µ÷ÓÃ getItemData ·½·¨»ñÈ¡Ã¿¸ö×´Ì¬Öµ²¢´æ´¢µ½½á¹ûÏòÁ¿ÖĞ
+        // éå†çŠ¶æ€åˆ—è¡¨ï¼Œè°ƒç”¨ getItemData æ–¹æ³•è·å–æ¯ä¸ªçŠ¶æ€å€¼å¹¶å­˜å‚¨åˆ°ç»“æœå‘é‡ä¸­
         for (int i = 0; i < list_size; i++) {
             result.push_back(getItemData<T>(state_list[i], nullptr));
         }

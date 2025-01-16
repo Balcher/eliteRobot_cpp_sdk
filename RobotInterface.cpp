@@ -1,4 +1,4 @@
-#include "RobotInterface.hpp"
+﻿#include "RobotInterface.hpp"
 #include <sstream>
 
 void RobotInterface::robotMove(const std::vector<double>& angles, double acceleration, double velocity, double time, double r)
@@ -8,7 +8,7 @@ void RobotInterface::robotMove(const std::vector<double>& angles, double acceler
     script << "def move():\n";
     script << "\tmovej([";
 
-    // ���ӽǶ�ֵ
+    // 添加角度值
     for (size_t i = 0; i < angles.size(); ++i) {
         script << angles[i];
         if (i < angles.size() - 1) {

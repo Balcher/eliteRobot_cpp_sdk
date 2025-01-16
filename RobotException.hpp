@@ -1,87 +1,87 @@
-#ifndef __ROBOTEXCEPTION_HPP__
+ï»¿#ifndef __ROBOTEXCEPTION_HPP__
 #define __ROBOTEXCEPTION_HPP__
 
 #include <memory>
 #include <any>
 #include <string>
+#include <cstdint> 
 
-/// @brief RobotException ¶¨ÒåÁËÒ»¸öRobotExceptionÀà¡£
-/// @note ÓÃÓÚ´¦ÀíÓë»úÆ÷ÈËÏà¹ØµÄÒì³£
+/// @brief RobotException å®šä¹‰äº†ä¸€ä¸ªRobotExceptionç±»ã€‚
+/// @note ç”¨äºŽå¤„ç†ä¸Žæœºå™¨äººç›¸å…³çš„å¼‚å¸¸
 class RobotException
 {
 private:
-    
+
 public:
     RobotException();
     ~RobotException();
 
-    /// @brief ´Ó×Ö½Ú»º³åÇø½â°üÒì³£
+    /// @brief ä»Žå­—èŠ‚ç¼“å†²åŒºè§£åŒ…å¼‚å¸¸
     /// 
-    /// ¸Ã·½·¨½âÎö¸ø¶¨µÄ×Ö½Ú»º³åÇø£¬ÌáÈ¡ÐòÁÐ»¯µÄÒì³£Êý¾Ý£¬²¢·µ»ØÒ»¸ö
-    /// 'RobotException'¶ÔÏóµÄÖÇÄÜÖ¸Õë¡£Èç¹û½â°ü¹ý³ÌÖÐ³öÏÖ´íÎó£¬
-    /// ½«·µ»Ø'nullptr'
+    /// è¯¥æ–¹æ³•è§£æžç»™å®šçš„å­—èŠ‚ç¼“å†²åŒºï¼Œæå–åºåˆ—åŒ–çš„å¼‚å¸¸æ•°æ®ï¼Œå¹¶è¿”å›žä¸€ä¸ª
+    /// 'RobotException'å¯¹è±¡çš„æ™ºèƒ½æŒ‡é’ˆã€‚å¦‚æžœè§£åŒ…è¿‡ç¨‹ä¸­å‡ºçŽ°é”™è¯¯ï¼Œ
+    /// å°†è¿”å›ž'nullptr'
     /// 
-    /// @param buffer Ö¸Ïò°üº¬ÐòÁÐ»¯Òì³£Êý¾ÝµÄ×Ö½Ú»º³åÇø
-    /// @return ·µ»Ø½â°üºóµÄ'RobotException'¶ÔÏóµÄÖÇÄÜÖ¸Õë£»Èç¹û½â°üÊ§°Ü£¬Ôò·µ»Ø'nullptr'
-    static std::shared_ptr<RobotException> unpackException(const uint8_t *buffer);
-    
-    std::uint64_t timestamp; ///< ¼ÇÂ¼Òì³£·¢ÉúµÄÊ±¼ä´Á
+    /// @param buffer æŒ‡å‘åŒ…å«åºåˆ—åŒ–å¼‚å¸¸æ•°æ®çš„å­—èŠ‚ç¼“å†²åŒº
+    /// @return è¿”å›žè§£åŒ…åŽçš„'RobotException'å¯¹è±¡çš„æ™ºèƒ½æŒ‡é’ˆï¼›å¦‚æžœè§£åŒ…å¤±è´¥ï¼Œåˆ™è¿”å›ž'nullptr'
+    static std::shared_ptr<RobotException> unpackException(const uint8_t* buffer);
 
-    /// @brief Òì³£ÀàÐÍÃ¶¾Ù
+    std::uint64_t timestamp; ///< è®°å½•å¼‚å¸¸å‘ç”Ÿçš„æ—¶é—´æˆ³
+
+    /// @brief å¼‚å¸¸ç±»åž‹æžšä¸¾
     enum ExceptionType : std::uint8_t {
-        RUN_TIME_EXCEPTION = 10,        ///< ÔËÐÐÊ±Òì³£
-        ERROR_CODE = 6                  ///< ´íÎó´úÂë
+        RUN_TIME_EXCEPTION = 10,        ///< è¿è¡Œæ—¶å¼‚å¸¸
+        ERROR_CODE = 6                  ///< é”™è¯¯ä»£ç 
     };
     ExceptionType exception_type;
 
-    /// @brief Òì³£À´Ô´Ã¶¾Ù£¬°üÀ¨ÔËÐÐÊ±¡¢°²È«¡¢GUI¡¢¿ØÖÆÆ÷µÈ
+    /// @brief å¼‚å¸¸æ¥æºæžšä¸¾ï¼ŒåŒ…æ‹¬è¿è¡Œæ—¶ã€å®‰å…¨ã€GUIã€æŽ§åˆ¶å™¨ç­‰
     enum Source : std::uint8_t {
         SOURCE_RUNTIME = 10,
-        SOURCE_SAFETY = 99,             ///< °²È«¿ØÖÆÆ÷
-        SOURCE_GUI = 103,               ///< Ê¾½ÌÆ÷UI
-        SOURCE_CONTROLLER = 104,        ///< ¿ØÖÆÆ÷
-        SOURCE_RTSI = 105,              ///< RTSIÐ­Òé
-        SOURCE_JOINT = 120,             ///< ¹Ø½Ú
-        SOURCE_TOOL = 121,              ///< ¹¤¾ß
-        SOURCE_TP = 122,                ///< Ê¾½ÌÆ÷
-        SOURCE_JOINT_FPGA = 200,        ///< ¹Ø½ÚFPGA
-        SOURCE_TOOL_FPGA = 201          ///< ¹¤¾ßFPGA
+        SOURCE_SAFETY = 99,             ///< å®‰å…¨æŽ§åˆ¶å™¨
+        SOURCE_GUI = 103,               ///< ç¤ºæ•™å™¨UI
+        SOURCE_CONTROLLER = 104,        ///< æŽ§åˆ¶å™¨
+        SOURCE_RTSI = 105,              ///< RTSIåè®®
+        SOURCE_JOINT = 120,             ///< å…³èŠ‚
+        SOURCE_TOOL = 121,              ///< å·¥å…·
+        SOURCE_TP = 122,                ///< ç¤ºæ•™å™¨
+        SOURCE_JOINT_FPGA = 200,        ///< å…³èŠ‚FPGA
+        SOURCE_TOOL_FPGA = 201          ///< å·¥å…·FPGA
     };
     Source source;
 
-    /// @brief ÔËÐÐÊ±Òì³£½á¹¹
+    /// @brief è¿è¡Œæ—¶å¼‚å¸¸ç»“æž„
     struct {
-        int32_t script_line;                 ///< ½Å±¾ÐÐºÅ
-        int32_t script_column;               ///< ½Å±¾ÁÐºÅ
-        std::string runtime_exception_text;  ///< ÔËÐÐÊ±Òì³£ÎÄ±¾
+        int32_t script_line;                 ///< è„šæœ¬è¡Œå·
+        int32_t script_column;               ///< è„šæœ¬åˆ—å·
+        std::string runtime_exception_text;  ///< è¿è¡Œæ—¶å¼‚å¸¸æ–‡æœ¬
     } runtime_exception;
-    
-    /// @brief ²»Í¬µÄ´íÎó¼¶±ð
-    enum ErrorLevel : std::int32_t {
-        INFO = 0,                      ///< ÏûÏ¢
-        WARNING = 1,                   ///< ¾¯¸æ
-        ERROR = 2,                     ///< ´íÎó
-        SEGMENT_FAULT = 3              ///< ÑÏÖØ´íÎó
+
+    enum ErrorLevel : std::uint32_t{
+        INFO = 0,
+        WARNING = 1,
+        ERROR = 2,
+        SEGMENT_FAULT = 3
     };
-    
-    /// @brief ¶¨ÒåÁË²»Í¬µÄÊý¾ÝÀàÐÍ
+
+    /// @brief å®šä¹‰äº†ä¸åŒçš„æ•°æ®ç±»åž‹
     enum DataType : std::uint32_t {
-        DATA_TYPE_NONE = 0,            ///< ÎÞ
-        DATA_TYPE_UNSIGNED = 1,        ///< ÎÞ·ûºÅ
-        DATA_TYPE_SIGNED = 2,          ///< ´ø·ûºÅ
-        DATA_TYPE_FLOAT = 3,           ///< ¸¡µã
-        DATA_TYPE_HEX = 4,             ///< Ê®Áù½øÖÆ
-        DATA_TYPE_STRING = 5,          ///< ×Ö·û´®
-        DATA_TYPE_JOINT = 6            ///< ¹Ø½ÚÊý¾Ý
+        DATA_TYPE_NONE = 0,            ///< æ— 
+        DATA_TYPE_UNSIGNED = 1,        ///< æ— ç¬¦å·
+        DATA_TYPE_SIGNED = 2,          ///< å¸¦ç¬¦å·
+        DATA_TYPE_FLOAT = 3,           ///< æµ®ç‚¹
+        DATA_TYPE_HEX = 4,             ///< åå…­è¿›åˆ¶
+        DATA_TYPE_STRING = 5,          ///< å­—ç¬¦ä¸²
+        DATA_TYPE_JOINT = 6            ///< å…³èŠ‚æ•°æ®
     };
-    
-    /// @brief Òì³£µÄÏêÏ¸ÐÅÏ¢
+
+    /// @brief å¼‚å¸¸çš„è¯¦ç»†ä¿¡æ¯
     struct {
-        int32_t code;                  ///< ´íÎó´úÂë
-        int32_t subcode;               ///< ×Ó´úÂë
-        ErrorLevel level;              ///< ´íÎó¼¶±ð
-        DataType data_type;            ///< Êý¾ÝÀàÐÍ
-        std::any exception_data;       ///< ÈÎÒâÒì³£Êý¾Ý
+        int32_t code;                  ///< é”™è¯¯ä»£ç 
+        int32_t subcode;               ///< å­ä»£ç 
+        ErrorLevel level;              ///< é”™è¯¯çº§åˆ«
+        DataType data_type;            ///< æ•°æ®ç±»åž‹
+        std::any exception_data;       ///< ä»»æ„å¼‚å¸¸æ•°æ®
     } error_exception;
 
 };

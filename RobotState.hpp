@@ -82,6 +82,8 @@ class RobotState {
         return result;
     }
 
+    int mysocketRecv(void* out_msg, int size);                             ///< 接收数据
+
     // 构造函数和析构函数
     RobotState();
     ~RobotState();

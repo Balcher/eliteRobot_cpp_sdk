@@ -1,22 +1,22 @@
-#include "RobotInterface.hpp"
+ï»¿#include "RobotInterface.hpp"
 
 #include <stdio.h>
 #include <iostream>
 #include <memory>
 
 int main(int argc, char** argv) {
-    std::unique_ptr<RobotInterface> robot = std::make_unique<RobotInterface>();    // ´´½¨»úÆ÷ÈË½Ó¿ÚÊµÀı
+    std::unique_ptr<RobotInterface> robot = std::make_unique<RobotInterface>();    // åˆ›å»ºæœºå™¨äººæ¥å£å®ä¾‹
     //if (argc < 2) {
-    //    std::cout << "Need provide Elite Robot IP address" << std::endl;           // Èç¹ûÃ»ÓĞÌá¹©»úÆ÷ÈËIPµØÖ·£¬ÔòÊä³öÌáÊ¾ĞÅÏ¢²¢·µ»Ø´íÎó
+    //    std::cout << "Need provide Elite Robot IP address" << std::endl;           // å¦‚æœæ²¡æœ‰æä¾›æœºå™¨äººIPåœ°å€ï¼Œåˆ™è¾“å‡ºæç¤ºä¿¡æ¯å¹¶è¿”å›é”™è¯¯
     //    return -1;
     //}
 
-    std::string ipAdd = "192.168.205.132";                                         // ipµØÖ·
-    if (!robot->loadConfigure("CS_UserManual_Robot_State_Message.txt")) {          // ¼ÓÔØÅäÖÃÎÄ¼ş
+    std::string ipAdd = "192.168.205.133";                                         // ipåœ°å€
+    if (!robot->loadConfigure("CS_UserManual_Robot_State_Message.txt")) {          // åŠ è½½é…ç½®æ–‡ä»¶
         std::cout << "Load Configure file fail. Check file path" << std::endl;
         return -1;
     }
-    robot->setExceptionCallback([](const RobotException& exception){               // Òì³£´¦Àí»Øµ÷
+    robot->setExceptionCallback([](const RobotException& exception){               // å¼‚å¸¸å¤„ç†å›è°ƒ
         // do somethings when an exception occurs.
         std::cout << "time stamp: " << exception.timestamp << " ";
         if (exception.exception_type == RobotException::ExceptionType::RUN_TIME_EXCEPTION) {
@@ -25,23 +25,23 @@ int main(int argc, char** argv) {
             std::cout << "Robot error exception" << std::endl;
         }
     });
-    if (!robot->connect(ipAdd, 30001)) {                                          // Á¬½Óµ½»úÆ÷ÈË
+    if (!robot->connect(ipAdd, 30001)) {                                          // è¿æ¥åˆ°æœºå™¨äºº
         std::cout << "Connect fail check network or IP" << std::endl;
         return -1;
     }
     // Make a robot runtime exception
-    robot->sendScript("def func():\n\tabcd(123)\nend\n");                         // ·¢ËÍÒ»¸ö¹ÊÒâÒı·¢ÔËĞĞÊ±Òì³£µÄ½Å±¾
+    robot->sendScript("def func():\n\tabcd(123)\nend\n");                         // å‘é€ä¸€ä¸ªæ•…æ„å¼•å‘è¿è¡Œæ—¶å¼‚å¸¸çš„è„šæœ¬
     std::vector<double> joint;
 
     while (true) {
 
-        // ÅĞ¶ÏÊÇ·ñÁ¬½Ó
+        // åˆ¤æ–­æ˜¯å¦è¿æ¥
         if (!robot->isConnect()) {
             return 0;
         }
-        joint = robot->getJointActualPos();                                       // »ñÈ¡»úÆ÷ÈËµÄÎ»×Ë
+        joint = robot->getJointActualPos();                                       // è·å–æœºå™¨äººçš„ä½å§¿
         
-        // »ñÈ¡´òÓ¡»úÆ÷ÈË¹Ø½ÚÎ»ÖÃ
+        // è·å–æ‰“å°æœºå™¨äººå…³èŠ‚ä½ç½®
         for (auto item : joint) {
             printf("%.3lf\t", item);
         }

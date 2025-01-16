@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.22.1)
+﻿cmake_minimum_required(VERSION 3.22.1)
 
 project(CppSample)
 
@@ -45,3 +45,25 @@ else()
         elite_robot_state
     )
 endif()
+
+
+# socket通信测试
+add_executable(socketConnect
+    ${PROJECT_SOURCE_DIR}/socketConnect.cpp
+    ${PROJECT_SOURCE_DIR}/Robot40011Port.cpp
+    ${PROJECT_SOURCE_DIR}/Robot40011Port.hpp
+)
+
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    target_link_libraries(
+        socketConnect
+        elite_robot_state
+        pthread
+    )
+else()
+    target_link_libraries(
+        socketConnect
+        elite_robot_state
+    )
+endif()
+
