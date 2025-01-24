@@ -31,3 +31,4 @@ add_library(
 
 
 add_subdirectory(${PROJECT_SOURCE_DIR}/CppSample/)
+add_subdirectory(${PROJECT_SOURCE_DIR}/HandEyeCalib/)
