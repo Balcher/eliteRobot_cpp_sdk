@@ -10,5 +10,5 @@ include_directories(${OpenCV_INCLUDE_DIRS})
 
 include_directories("D:\\Program Files (x86)\\eigen-3.4.0")
 
-add_executable(handEyeCalibTest test.cpp "handEyeCalib.cpp" "handEyeCalib.hpp")
-target_link_libraries(handEyeCalibTest ${OpenCV_LIBS})
+add_executable(calibExample calibExample.cpp "handEyeCalib.cpp" "handEyeCalib.hpp")
+target_link_libraries(calibExample ${OpenCV_LIBS})
