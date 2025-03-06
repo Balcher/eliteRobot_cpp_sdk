@@ -29,40 +29,20 @@ else()
     )
 endif()
 
-add_executable(mytest
-    ${PROJECT_SOURCE_DIR}/test.cpp
-)
-
-if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
-    target_link_libraries(
-        mytest
-        elite_robot_state
-        pthread
-    )
-else()
-    target_link_libraries(
-        mytest
-        elite_robot_state
-    )
-endif()
-
-
 # socket通信测试
-add_executable(socketConnect
-    ${PROJECT_SOURCE_DIR}/socketConnect.cpp
-    ${PROJECT_SOURCE_DIR}/Robot40011Port.cpp
-    ${PROJECT_SOURCE_DIR}/Robot40011Port.hpp
+add_executable(Robot40011PortTest
+    ${PROJECT_SOURCE_DIR}/Robot40011PortTest.cpp
 )
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
     target_link_libraries(
-        socketConnect
+        Robot40011PortTest
         elite_robot_state
         pthread
     )
 else()
     target_link_libraries(
-        socketConnect
+        Robot40011PortTest
         elite_robot_state
     )
 endif()

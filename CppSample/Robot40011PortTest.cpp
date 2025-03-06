@@ -42,7 +42,7 @@ int main()
 
 
     // 逆解运算
-	std::vector<double> poses = { 0.310, -0.07535, 2.02347, -1.470, 0.343, -1.016 };
+	std::vector<double> poses = { 0.732925, - 0.224705, 1.2014, - 1.7403, - 0.632715, - 0.803399 };
 	std::vector<double> degrees;
 	bool flag = robot->getIKDegrees(poses, degrees);
 	std::cout << "flag = " << flag << std::endl;

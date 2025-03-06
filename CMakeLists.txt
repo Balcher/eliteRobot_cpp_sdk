@@ -16,6 +16,7 @@ set(
     RobotState.cpp
     RobotException.cpp
     RobotInterface.cpp
+    Robot40011Port.cpp
 )
 
 include_directories(

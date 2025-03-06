@@ -1,4 +1,11 @@
-﻿#ifndef __ROBOT40011PORT_HPP__
+﻿/*****************************************************************//**
+ * \file   Robot40011Port.hpp
+ * \brief  该模块主要用于通过40011端口驱动机器人运动
+ * 
+ * \author BCK
+ * \date   March 2025
+ *********************************************************************/
+#ifndef __ROBOT40011PORT_HPP__
 #define __ROBOT40011PORT_HPP__
 
 #include <cstring>
@@ -16,7 +23,7 @@ public:
 	/// @param poses     位姿[x,y,z,r,p,y] 单位m和rad
 	/// @param degrees   六个电机的角度值
 	/// @return 是否有解
-	bool Robot40011Port::getIKDegrees(const std::vector<double>& poses, std::vector<double>& degrees);
+	bool getIKDegrees(const std::vector<double>& poses, std::vector<double>& degrees);
 
 	/// @brief 连接到指定的 IP 和端口
 	/// @param ip 目标 IP 地址
