@@ -9,27 +9,27 @@ int main()
 	std::cout << "cv version = " << CV_VERSION << std::endl;
 	std::string Fileroot = "D:\\gitResository\\eliteRobot_cpp_sdk\\HandEyeCalib\\calib2.26\\";
 
-	//// ½«Î»×Ë±£´æµ½csvÎÄ¼şÖĞ²âÊÔ£¨Êµ¼ÊÃ»ÓĞÊ²Ã´ÓÃ£¬²âÊÔÓÃ£©
+	//// å°†ä½å§¿ä¿å­˜åˆ°csvæ–‡ä»¶ä¸­æµ‹è¯•ï¼ˆå®é™…æ²¡æœ‰ä»€ä¹ˆç”¨ï¼Œæµ‹è¯•ç”¨ï¼‰
 	std::string filePath = Fileroot + "poses.txt";
 	std::string csvFilePath = Fileroot + "csvFile.csv";
 	HandEyeCalib* myHandEyeCalib = new HandEyeCalib(9, 6, 0.025);
 	myHandEyeCalib->poseSaveCSV(filePath, csvFilePath);
 
-	// ´ÓÎÄ¼şÖĞ¶ÁÈ¡Í¼Æ¬²âÊÔ
+	// ä»æ–‡ä»¶ä¸­è¯»å–å›¾ç‰‡æµ‹è¯•
 	std::vector<std::string> imagefiles;
 	std::string imagefolder = Fileroot;
 	std::cout << "imagefolder = " << imagefolder << std::endl;
 	myHandEyeCalib->readFileNameFromFolder(imagefolder, imagefiles);
 
-	// ±ê¶¨³õÊ¼»¯
+	// æ ‡å®šåˆå§‹åŒ–
 	std::string imageFolder = Fileroot;
 	std::string poseFile = Fileroot + "poses.txt";
 	myHandEyeCalib->CalibInit(imageFolder, poseFile);
 
-	Eigen::Matrix4d eyeInHandT = myHandEyeCalib->computeEyeInHandT(); // ÑÛÔÚÊÖÉÏ±ê¶¨
+	Eigen::Matrix4d eyeInHandT = myHandEyeCalib->computeEyeInHandT(); // çœ¼åœ¨æ‰‹ä¸Šæ ‡å®š
 	std::cout << "eyeInHandT = \n" << eyeInHandT << std::endl;
 
-	//Eigen::Matrix4d eyeToHandT = myHandEyeCalib->computeEyeToHandT(); // ÑÛÔÚÊÖÍâ±ê¶¨
+	//Eigen::Matrix4d eyeToHandT = myHandEyeCalib->computeEyeToHandT(); // çœ¼åœ¨æ‰‹å¤–æ ‡å®š
 	//std::cout << "eyeToHandT = \n" << eyeToHandT << std::endl;
 
 }

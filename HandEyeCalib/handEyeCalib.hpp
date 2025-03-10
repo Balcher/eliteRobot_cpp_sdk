@@ -20,74 +20,74 @@ public:
 	HandEyeCalib() = delete;
 
 	////////////////////////////////////////////////////////////
-	///                   ÎÄ¼ş¶ÁÈ¡Ïà¹Øº¯Êı
+	///                   æ–‡ä»¶è¯»å–ç›¸å…³å‡½æ•°
 	///////////////////////////////////////////////////////////
  
-	/// @brief ½«Å·À­½Ç×ª»»³ÉĞı×ª¾ØÕó£¨ZYXĞÎÊ½£©
-	/// @param rx ÈÆxÖáĞı×ª½Ç¶È
-	/// @param ry ÈÆyÖáĞı×ª½Ç¶È
-	/// @param rz ÈÆzÖáĞı×ª½Ç¶È
-	/// @return Ğı×ª¾ØÕó
+	/// @brief å°†æ¬§æ‹‰è§’è½¬æ¢æˆæ—‹è½¬çŸ©é˜µï¼ˆZYXå½¢å¼ï¼‰
+	/// @param rx ç»•xè½´æ—‹è½¬è§’åº¦
+	/// @param ry ç»•yè½´æ—‹è½¬è§’åº¦
+	/// @param rz ç»•zè½´æ—‹è½¬è§’åº¦
+	/// @return æ—‹è½¬çŸ©é˜µ
 	Eigen::Matrix3d eulerAnglesToRotationMatrix(double rx, double ry, double rz);
 
-	/// @brief ½«Êı×éĞÎÊ½µÄpose×ª»»³ÉÆë´Î¾ØÕó
-	/// @param pose Êı×éĞÎÊ½µÄpose
-	/// @return Æë´Î¾ØÕó
+	/// @brief å°†æ•°ç»„å½¢å¼çš„poseè½¬æ¢æˆé½æ¬¡çŸ©é˜µ
+	/// @param pose æ•°ç»„å½¢å¼çš„pose
+	/// @return é½æ¬¡çŸ©é˜µ
 	Eigen::Matrix4d poseToHomogeneousMatrix(const std::vector<double>& pose);
 
-	/// @brief ½«¾ØÕó´æ´¢µ½CSVÎÄ¼şÖĞ
-	/// @param matrixes Æë´Î¾ØÕóÊı×é
-	/// @param fileName ´æ´¢µÄcsvÎÄ¼şÃû³Æ
+	/// @brief å°†çŸ©é˜µå­˜å‚¨åˆ°CSVæ–‡ä»¶ä¸­
+	/// @param matrixes é½æ¬¡çŸ©é˜µæ•°ç»„
+	/// @param fileName å­˜å‚¨çš„csvæ–‡ä»¶åç§°
 	void saveMatrixToCSV(const std::vector<Eigen::Matrix4d>& matrixes, const std::string& fileName);
 
-	/// @brief ¶ÁÈ¡txtÎÄ¼şÖĞµÄpose£¬È»ºó´æ´¢µ½csvÖĞ
-	/// @param poseFilePath poseÎÄ¼şÃû
-	/// @param csvFilePath  ´æ´¢µÄcsvÎÄ¼şÂ·¾¶ºÍÃû³Æ
+	/// @brief è¯»å–txtæ–‡ä»¶ä¸­çš„poseï¼Œç„¶åå­˜å‚¨åˆ°csvä¸­
+	/// @param poseFilePath poseæ–‡ä»¶å
+	/// @param csvFilePath  å­˜å‚¨çš„csvæ–‡ä»¶è·¯å¾„å’Œåç§°
 	void poseSaveCSV(const std::string& poseFilePath, const std::string& csvFilePath);
 
-	/// @brief ÅĞ¶ÏÎÄ¼şÊÇ·ñÊÇÍ¼Æ¬¸ñÊ½
-	/// @param filePath Í¼Æ¬ÎÄ¼ş
-	/// @return true£ºÍ¼Æ¬¸ñÊ½£¬false£º²»ÊÇÍ¼Æ¬¸ñÊ½
+	/// @brief åˆ¤æ–­æ–‡ä»¶æ˜¯å¦æ˜¯å›¾ç‰‡æ ¼å¼
+	/// @param filePath å›¾ç‰‡æ–‡ä»¶
+	/// @return trueï¼šå›¾ç‰‡æ ¼å¼ï¼Œfalseï¼šä¸æ˜¯å›¾ç‰‡æ ¼å¼
 	static bool is_imageFile(const std::filesystem::path& file);
 
-	/// @brief ÌáÈ¡ÎÄ¼şÃûÖĞµÄÊı×Ö²¿·Ö
-	/// @param filename ÎÄ¼şÃû
+	/// @brief æå–æ–‡ä»¶åä¸­çš„æ•°å­—éƒ¨åˆ†
+	/// @param filename æ–‡ä»¶å
 	static int extractNumberFromFileNames(const std::string& filename);
 
-	/// @brief ´ÓÎÄ¼ş¼ĞÖĞ¶ÁÈ¡Í¼Æ¬Ãû³Æ
-	/// @param foldPath ÎÄ¼ş¼ĞÂ·¾¶
-	/// @param imgFileNames Í¼Æ¬Ãû³Æ
+	/// @brief ä»æ–‡ä»¶å¤¹ä¸­è¯»å–å›¾ç‰‡åç§°
+	/// @param foldPath æ–‡ä»¶å¤¹è·¯å¾„
+	/// @param imgFileNames å›¾ç‰‡åç§°
 	static void readFileNameFromFolder(const std::string& folderPath, std::vector<std::string>& imgFileNames);
 
 	////////////////////////////////////////////////////////////
-	///                       ±ê¶¨Ïà¹Ø
+	///                       æ ‡å®šç›¸å…³
 	///////////////////////////////////////////////////////////
 	
-	int cornerPointLong_;                 ///< ±ê¶¨°å½ÇµãÊıÁ¿£¬³¤±ß
-	int cornerPointShort_;                ///< ±ê¶¨°å½ÇµãÊıÁ¿£¬¶Ì±ß
-	float cornerPointSize_;               ///< ±ê¶¨°å·½¸ñÕæÊµ³ß´ç£¬m
+	int cornerPointLong_;                 ///< æ ‡å®šæ¿è§’ç‚¹æ•°é‡ï¼Œé•¿è¾¹
+	int cornerPointShort_;                ///< æ ‡å®šæ¿è§’ç‚¹æ•°é‡ï¼ŒçŸ­è¾¹
+	float cornerPointSize_;               ///< æ ‡å®šæ¿æ–¹æ ¼çœŸå®å°ºå¯¸ï¼Œm
 
-	cv::Mat cameraIntrinsicMatrix_;       ///< Ïà»úÄÚ²Î¾ØÕó
-	cv::Mat cameraDistortionMatrix_;      ///< Ïà»ú»û±ä²ÎÊı¾ØÕó[k1, k2, p1, p2, k3]
-	std::vector<cv::Mat> rvecs_, tvecs_;  ///< Ïà»ú±ê¶¨¹ı³ÌÖĞµÃµ½µÄĞı×ª¾ØÕóºÍÆ½ÒÆÏòÁ¿,´ÓÊÀ½ç×ø±êÏµµ½Ïà»ú×ø±êÏµµÄ±ä»»¾ØÕó
+	cv::Mat cameraIntrinsicMatrix_;       ///< ç›¸æœºå†…å‚çŸ©é˜µ
+	cv::Mat cameraDistortionMatrix_;      ///< ç›¸æœºç•¸å˜å‚æ•°çŸ©é˜µ[k1, k2, p1, p2, k3]
+	std::vector<cv::Mat> rvecs_, tvecs_;  ///< ç›¸æœºæ ‡å®šè¿‡ç¨‹ä¸­å¾—åˆ°çš„æ—‹è½¬çŸ©é˜µå’Œå¹³ç§»å‘é‡,ä»ä¸–ç•Œåæ ‡ç³»åˆ°ç›¸æœºåæ ‡ç³»çš„å˜æ¢çŸ©é˜µ
 	
-	std::vector<cv::Mat> calibImages_;    ///< ÊÖÑÛ±ê¶¨µÄÍ¼Æ¬Êı¾İ
-	std::vector<Eigen::Matrix4d> poses_; ///< µ±Ç°»úĞµ±ÛÄ©¶Ëµ½»ù×ùµÄ×ª»»¾ØÕó
+	std::vector<cv::Mat> calibImages_;    ///< æ‰‹çœ¼æ ‡å®šçš„å›¾ç‰‡æ•°æ®
+	std::vector<Eigen::Matrix4d> poses_; ///< å½“å‰æœºæ¢°è‡‚æœ«ç«¯åˆ°åŸºåº§çš„è½¬æ¢çŸ©é˜µ
 
-	/// @brief ³õÊ¼»¯º¯Êı£¬¶ÁÈ¡Í¼Æ¬ºÍÎ»×Ë
-	/// @param imgfolderPath   Í¼Æ¬ÎÄ¼ş¼ĞÂ·¾¶
-	/// @param poseFilePath    Î»×ËÎÄ¼şÂ·¾¶
+	/// @brief åˆå§‹åŒ–å‡½æ•°ï¼Œè¯»å–å›¾ç‰‡å’Œä½å§¿
+	/// @param imgfolderPath   å›¾ç‰‡æ–‡ä»¶å¤¹è·¯å¾„
+	/// @param poseFilePath    ä½å§¿æ–‡ä»¶è·¯å¾„
 	void CalibInit(const std::string& imgfolderPath, const std::string& poseFilePath);
 
 	void cameraCalib();
 
-	/// @brief ÑÛÔÚÊÖÉÏ±ê¶¨
-	/// @brief method ÊÖÑÛ±ê¶¨µÄ·½·¨,Ä¬ÈÏÊ¹ÓÃCALIB_HAND_EYE_TSAI
-	/// @return Ïà»ú×ø±êÏµµ½»úĞµ±ÛÄ©¶ËµÄ±ä»»¾ØÕó
+	/// @brief çœ¼åœ¨æ‰‹ä¸Šæ ‡å®š
+	/// @brief method æ‰‹çœ¼æ ‡å®šçš„æ–¹æ³•,é»˜è®¤ä½¿ç”¨CALIB_HAND_EYE_TSAI
+	/// @return ç›¸æœºåæ ‡ç³»åˆ°æœºæ¢°è‡‚æœ«ç«¯çš„å˜æ¢çŸ©é˜µ
 	Eigen::Matrix4d computeEyeInHandT(cv::HandEyeCalibrationMethod method = cv::CALIB_HAND_EYE_TSAI);
 
-	/// @brief ÑÛÔÚÊÖÍâ±ê¶¨
-	/// @return Ïà»ú×ø±êÏµµ½»úĞµ±Û»ù×ùµÄ±ä»»¾ØÕó
+	/// @brief çœ¼åœ¨æ‰‹å¤–æ ‡å®š
+	/// @return ç›¸æœºåæ ‡ç³»åˆ°æœºæ¢°è‡‚åŸºåº§çš„å˜æ¢çŸ©é˜µ
 	Eigen::Matrix4d computeEyeToHandT(cv::HandEyeCalibrationMethod method = cv::CALIB_HAND_EYE_TSAI);
 
 

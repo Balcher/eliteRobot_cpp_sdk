@@ -2,25 +2,25 @@
 
 Eigen::Matrix3d HandEyeCalib::eulerAnglesToRotationMatrix(double rx, double ry, double rz)
 {
-	// ÈÆXÖáµÄĞı×ª¾ØÕó
+	// ç»•Xè½´çš„æ—‹è½¬çŸ©é˜µ
 	Eigen::Matrix3d Rx;
 	Rx << 1, 0, 0,
 		0, cos(rx), -sin(rx),
 		0, sin(rx), cos(rx);
 
-    // ÈÆyÖáµÄĞı×ª¾ØÕó
+    // ç»•yè½´çš„æ—‹è½¬çŸ©é˜µ
     Eigen::Matrix3d Ry;
     Ry << cos(ry), 0, sin(ry),
         0, 1, 0,
         -sin(ry), 0, cos(ry);
 
-    // ÈÆzÖáµÄĞı×ª¾ØÕó
+    // ç»•zè½´çš„æ—‹è½¬çŸ©é˜µ
     Eigen::Matrix3d Rz;
     Rz << cos(rz), -sin(rz), 0,
         sin(rz), cos(rz), 0,
         0, 0, 1;
 
-    // ÏÈÈÆzÖáĞı×ª£¬ÔÙÈÆyÖáĞı×ª£¬×îºóÈÆxÖáĞı×ª
+    // å…ˆç»•zè½´æ—‹è½¬ï¼Œå†ç»•yè½´æ—‹è½¬ï¼Œæœ€åç»•xè½´æ—‹è½¬
     Eigen::Matrix3d R = Rz * Ry * Rx;
 
     return R;
@@ -35,35 +35,35 @@ Eigen::Matrix4d HandEyeCalib::poseToHomogeneousMatrix(const std::vector<double>&
     double ry = pose[4];
     double rz = pose[5];
 
-    // ¼ÆËãĞı×ª¾ØÕó
+    // è®¡ç®—æ—‹è½¬çŸ©é˜µ
     Eigen::Matrix3d R = eulerAnglesToRotationMatrix(rx, ry, rz);
 
-    // ´´½¨Æë´Î±ä»»¾ØÕó
+    // åˆ›å»ºé½æ¬¡å˜æ¢çŸ©é˜µ
     Eigen::Matrix4d H = Eigen::Matrix4d::Identity();
-    H.block<3, 3>(0, 0) = R;    // ½«Ğı×ª¾ØÕó¸³Öµµ½Æë´Î¾ØÕó
-    H.block<3, 1>(0, 3) = Eigen::Vector3d(x, y, z); // ÉèÖÃÆ½ÒÆÏòÁ¿
+    H.block<3, 3>(0, 0) = R;    // å°†æ—‹è½¬çŸ©é˜µèµ‹å€¼åˆ°é½æ¬¡çŸ©é˜µ
+    H.block<3, 1>(0, 3) = Eigen::Vector3d(x, y, z); // è®¾ç½®å¹³ç§»å‘é‡
 
     return H;
 }
 
 void HandEyeCalib::saveMatrixToCSV(const std::vector<Eigen::Matrix4d>& matrixes, const std::string& fileName)
 {
-    // ¼ì²éÊäÈë¾ØÕóÊÇ·ñÎª¿Õ
+    // æ£€æŸ¥è¾“å…¥çŸ©é˜µæ˜¯å¦ä¸ºç©º
     if (matrixes.empty())
     {
         std::cerr << "The list of matrixes is empty" << std::endl;
         return;
     }
 
-    // »ñÈ¡¾ØÕóĞĞÊıºÍÁĞÊı
+    // è·å–çŸ©é˜µè¡Œæ•°å’Œåˆ—æ•°
     int rows = matrixes[0].rows();
     int cols = matrixes[0].cols();
     int numMatrixes = matrixes.size();
 
-    // ³õÊ¼»¯ºÏ²¢¾ØÕó
+    // åˆå§‹åŒ–åˆå¹¶çŸ©é˜µ
     Eigen::MatrixXd combineMatrix = Eigen::MatrixXd::Zero(rows, cols * numMatrixes);
 
-    // ½«ÊäÈë¾ØÕóºáÏòÆ´½Óµ½ºÏ²¢¾ØÕó
+    // å°†è¾“å…¥çŸ©é˜µæ¨ªå‘æ‹¼æ¥åˆ°åˆå¹¶çŸ©é˜µ
     for (int i = 0; i < numMatrixes; ++i)
     {
         if (matrixes[i].cols() != cols || matrixes[i].rows() != rows)
@@ -74,7 +74,7 @@ void HandEyeCalib::saveMatrixToCSV(const std::vector<Eigen::Matrix4d>& matrixes,
         combineMatrix.block(0, i * cols, rows, cols) = matrixes[i];
     }
 
-    // ´ò¿ªCSVÎÄ¼ş½øĞĞĞ´Èë
+    // æ‰“å¼€CSVæ–‡ä»¶è¿›è¡Œå†™å…¥
     std::ofstream csvFile(fileName);
     if (!csvFile.is_open())
     {
@@ -82,7 +82,7 @@ void HandEyeCalib::saveMatrixToCSV(const std::vector<Eigen::Matrix4d>& matrixes,
         return;
     }
 
-    // Ğ´ÈëÊı¾İµ½CSVÎÄ¼ş
+    // å†™å…¥æ•°æ®åˆ°CSVæ–‡ä»¶
     for (int r = 0; r < combineMatrix.rows(); ++r)
     {
         for (int c = 0; c < combineMatrix.cols(); ++c)
@@ -112,20 +112,20 @@ void HandEyeCalib::poseSaveCSV(const std::string& poseFilePath, const std::strin
     std::vector<double> lines;
     std::string line;
 
-    // ¶ÁÈ¡ÎÄ¼şÖĞµÄËùÓĞÊı¾İ
+    // è¯»å–æ–‡ä»¶ä¸­çš„æ‰€æœ‰æ•°æ®
     while (std::getline(inFile, line))
     {
         std::stringstream ss(line);
         std::string value;
         while (std::getline(ss, value, ','))
         {
-            lines.push_back(std::stod(value));    // ½«×Ö·û´®×ª»»Îª double
+            lines.push_back(std::stod(value));    // å°†å­—ç¬¦ä¸²è½¬æ¢ä¸º double
         }
     }
 
     inFile.close();
 
-    // ½«6¸öÖµ×ª»»ÎªÆë´Î±ä»»¾ØÕó
+    // å°†6ä¸ªå€¼è½¬æ¢ä¸ºé½æ¬¡å˜æ¢çŸ©é˜µ
     std::vector<Eigen::Matrix4d> matrixes;
     for (size_t i = 0; i < lines.size(); i += 6)
     {
@@ -134,7 +134,7 @@ void HandEyeCalib::poseSaveCSV(const std::string& poseFilePath, const std::strin
         matrixes.push_back(matrix);
     }
 
-    // ±£´æÆë´Î±ä»»¾ØÕóµ½csvÎÄ¼ş
+    // ä¿å­˜é½æ¬¡å˜æ¢çŸ©é˜µåˆ°csvæ–‡ä»¶
     saveMatrixToCSV(matrixes, csvFilePath);
 
 }
@@ -144,7 +144,7 @@ bool HandEyeCalib::is_imageFile(const std::filesystem::path& file)
     std::vector<std::string> image_extensions = { ".jpg", ".jpeg", ".png", ".bmp", ".gif", ".tiff", ".webp" };
     std::string extension = file.extension().string();
 
-    // ×ªÎªĞ¡Ğ´£¬±ÜÃâ´óĞ¡Ğ´Ãô¸ĞµÄÎÊÌâ
+    // è½¬ä¸ºå°å†™ï¼Œé¿å…å¤§å°å†™æ•æ„Ÿçš„é—®é¢˜
     std::transform(extension.begin(), extension.end(), extension.begin(), ::tolower);
 
     for (const auto& ext : image_extensions)
@@ -167,7 +167,7 @@ int HandEyeCalib::extractNumberFromFileNames(const std::string& filename)
         }
     }
 
-    return num_str.empty() ? -1 : std::stoi(num_str);    // Èç¹ûÃ»ÓĞÊı×Ö£¬·µ»Ø -1
+    return num_str.empty() ? -1 : std::stoi(num_str);    // å¦‚æœæ²¡æœ‰æ•°å­—ï¼Œè¿”å› -1
 }
 
 void HandEyeCalib::readFileNameFromFolder(const std::string& folderPath, std::vector<std::string>& imgFileNames)
@@ -177,12 +177,12 @@ void HandEyeCalib::readFileNameFromFolder(const std::string& folderPath, std::ve
     {
         if (std::filesystem::is_regular_file(entry.status()) && is_imageFile(entry.path()))
         {
-            // Èç¹ûÊÇÎÄ¼şÇÒÊÇÍ¼Æ¬ÎÄ¼ş£¬Ìí¼Óµ½ÎÄ¼şÃûÁĞ±íÖĞ
+            // å¦‚æœæ˜¯æ–‡ä»¶ä¸”æ˜¯å›¾ç‰‡æ–‡ä»¶ï¼Œæ·»åŠ åˆ°æ–‡ä»¶ååˆ—è¡¨ä¸­
             imageNames.push_back(entry.path().filename().string());
         }
     }
 
-    // °´ÕÕÎÄ¼şÃûÖĞµÄÊı×Ö²¿·ÖÅÅĞò
+    // æŒ‰ç…§æ–‡ä»¶åä¸­çš„æ•°å­—éƒ¨åˆ†æ’åº
     std::sort(imageNames.begin(), imageNames.end(),
         [](const std::string& a, const std::string& b) {
             return extractNumberFromFileNames(a) < extractNumberFromFileNames(b);
@@ -203,12 +203,12 @@ void HandEyeCalib::readFileNameFromFolder(const std::string& folderPath, std::ve
 void HandEyeCalib::CalibInit(const std::string& imgfolderPath, const std::string& poseFilePath)
 {
     
-    // STEP 1. ¶ÁÈ¡Í¼Æ¬µ½ÄÚ´æÖĞ
-    // »ñÈ¡Í¼Æ¬µÄÂ·¾¶ÁĞ±í
+    // STEP 1. è¯»å–å›¾ç‰‡åˆ°å†…å­˜ä¸­
+    // è·å–å›¾ç‰‡çš„è·¯å¾„åˆ—è¡¨
     std::vector<std::string> imgFileNames;
     readFileNameFromFolder(imgfolderPath, imgFileNames);
 
-    // ¶ÁÈ¡Í¼Æ¬´æµ½ÄÚ´æÖĞ
+    // è¯»å–å›¾ç‰‡å­˜åˆ°å†…å­˜ä¸­
     cv::Mat img;
     for (int i = 0; i < imgFileNames.size(); i++)
     {
@@ -217,7 +217,7 @@ void HandEyeCalib::CalibInit(const std::string& imgfolderPath, const std::string
         calibImages_.push_back(img);
     }
 
-    // STEP 2. ¶ÁÈ¡Î»×Ëµ½ÄÚ´æÖĞ
+    // STEP 2. è¯»å–ä½å§¿åˆ°å†…å­˜ä¸­
     std::ifstream inFile(poseFilePath);
     if (!inFile.is_open())
     {
@@ -227,20 +227,20 @@ void HandEyeCalib::CalibInit(const std::string& imgfolderPath, const std::string
     std::vector<double> lines;
     std::string line;
 
-    // ¶ÁÈ¡ÎÄ¼şÖĞµÄËùÓĞÊı¾İ
+    // è¯»å–æ–‡ä»¶ä¸­çš„æ‰€æœ‰æ•°æ®
     while (std::getline(inFile, line))
     {
         std::stringstream ss(line);
         std::string value;
         while (std::getline(ss, value, ','))
         {
-            lines.push_back(std::stod(value));    // ½«×Ö·û´®×ª»»Îª double
+            lines.push_back(std::stod(value));    // å°†å­—ç¬¦ä¸²è½¬æ¢ä¸º double
         }
     }
 
     inFile.close();
 
-    // ½«6¸öÖµ×ª»»ÎªÆë´Î±ä»»¾ØÕó, Å·À­½ÇÊÇ ZYX×ª»»ĞÎÊ½
+    // å°†6ä¸ªå€¼è½¬æ¢ä¸ºé½æ¬¡å˜æ¢çŸ©é˜µ, æ¬§æ‹‰è§’æ˜¯ ZYXè½¬æ¢å½¢å¼
     for (size_t i = 0; i < lines.size(); i += 6)
     {
         std::vector<double> pose(lines.begin() + i, lines.begin() + i + 6);
@@ -253,16 +253,16 @@ void HandEyeCalib::CalibInit(const std::string& imgfolderPath, const std::string
 void HandEyeCalib::cameraCalib()
 {
     std::cout << "========================" << std::endl;
-    std::cout << "       Ïà»úÄÚ²Î±ê¶¨     " << std::endl;
+    std::cout << "       ç›¸æœºå†…å‚æ ‡å®š     " << std::endl;
     std::cout << "========================" << std::endl;
-    std::cout << "±ê¶¨°åÖĞ³¤±ß·½Ïò¶ÔÓ¦µÄ½Çµã¸öÊıÎª £º " << cornerPointLong_ << std::endl;
-    std::cout << "±ê¶¨°åÖĞ¶Ì±ß·½Ïò¶ÔÓ¦µÄ½Çµã¸öÊıÎª £º " << cornerPointShort_ << std::endl;
-    std::cout << "±ê¶¨°åÖĞ·½¸ñÕæÊµ³ß´çÎª £º " << cornerPointSize_ << " m." << std::endl;
+    std::cout << "æ ‡å®šæ¿ä¸­é•¿è¾¹æ–¹å‘å¯¹åº”çš„è§’ç‚¹ä¸ªæ•°ä¸º ï¼š " << cornerPointLong_ << std::endl;
+    std::cout << "æ ‡å®šæ¿ä¸­çŸ­è¾¹æ–¹å‘å¯¹åº”çš„è§’ç‚¹ä¸ªæ•°ä¸º ï¼š " << cornerPointShort_ << std::endl;
+    std::cout << "æ ‡å®šæ¿ä¸­æ–¹æ ¼çœŸå®å°ºå¯¸ä¸º ï¼š " << cornerPointSize_ << " m." << std::endl;
 
-    // ÉèÖÃÑ°ÕÒÑÇÏñËØ½ÇµãµÄ²ÎÊı
-    cv::TermCriteria criteria(cv::TermCriteria::MAX_ITER | cv::TermCriteria::EPS, 30, 0.001); // ×î´óµü´ú´ÎÊı 30»òÎó²îÈİÏŞ0.001
+    // è®¾ç½®å¯»æ‰¾äºšåƒç´ è§’ç‚¹çš„å‚æ•°
+    cv::TermCriteria criteria(cv::TermCriteria::MAX_ITER | cv::TermCriteria::EPS, 30, 0.001); // æœ€å¤§è¿­ä»£æ¬¡æ•° 30æˆ–è¯¯å·®å®¹é™0.001
 
-    // »ñÈ¡±ê¶¨°å½ÇµãµÄÎ»ÖÃ(3Î¬½Çµã)
+    // è·å–æ ‡å®šæ¿è§’ç‚¹çš„ä½ç½®(3ç»´è§’ç‚¹)
     std::vector<cv::Point3f> objp;
     for (int i = 0; i < cornerPointShort_; ++i)
     {
@@ -272,30 +272,30 @@ void HandEyeCalib::cameraCalib()
         }
     }
 
-    std::vector<std::vector<cv::Point3f>> obj_points;    // ´æ´¢ËùÓĞÍ¼ÏñÖĞµÄ3Dµã
-    std::vector<std::vector<cv::Point2f>> img_points;    // ´æ´¢ËùÓĞÍ¼ÏñÖĞµÄ2Dµã
+    std::vector<std::vector<cv::Point3f>> obj_points;    // å­˜å‚¨æ‰€æœ‰å›¾åƒä¸­çš„3Dç‚¹
+    std::vector<std::vector<cv::Point2f>> img_points;    // å­˜å‚¨æ‰€æœ‰å›¾åƒä¸­çš„2Dç‚¹
 
-    // Ñ°ÕÒÑÇÏñËØ2dµã
+    // å¯»æ‰¾äºšåƒç´ 2dç‚¹
     for (int i = 0; i < calibImages_.size(); ++i)
     {
-        // ¼ì²â½Çµã
+        // æ£€æµ‹è§’ç‚¹
         std::vector<cv::Point2f> corners;
         bool found = cv::findChessboardCorners(calibImages_[i], cv::Size(cornerPointLong_, cornerPointShort_), corners);
 
         if (found) {
             obj_points.emplace_back(objp);
 
-            // Ñ°ÕÒÑÇÏñËØ½Çµã
+            // å¯»æ‰¾äºšåƒç´ è§’ç‚¹
             cv::cornerSubPix(calibImages_[i], corners, cv::Size(5, 5), cv::Size(-1, -1), criteria);
 
             img_points.emplace_back(corners);
         }
     }
 
-    // Ïà»ú±ê¶¨
+    // ç›¸æœºæ ‡å®š
     double rms = cv::calibrateCamera(obj_points, img_points, calibImages_[0].size(),
-        cameraIntrinsicMatrix_, cameraDistortionMatrix_, rvecs_, tvecs_);  // ´ÓÊÀ½ç×ø±êÏµµ½Ïà»ú×ø±êÏµµÄ±ä»»¾ØÕó
-    // Êä³ö±ê¶¨½á¹û
+        cameraIntrinsicMatrix_, cameraDistortionMatrix_, rvecs_, tvecs_);  // ä»ä¸–ç•Œåæ ‡ç³»åˆ°ç›¸æœºåæ ‡ç³»çš„å˜æ¢çŸ©é˜µ
+    // è¾“å‡ºæ ‡å®šç»“æœ
     std::cout << "RMS Error: " << rms << std::endl;
     std::cout << "Camera Matrix:\n" << cameraIntrinsicMatrix_ << std::endl;
     std::cout << "Distortion Coefficients:\n" << cameraDistortionMatrix_ << std::endl;
@@ -304,32 +304,32 @@ void HandEyeCalib::cameraCalib()
 
 Eigen::Matrix4d HandEyeCalib::computeEyeInHandT(cv::HandEyeCalibrationMethod method)
 {
-    // STEP 1£ºÏà»úÄÚ²Î±ê¶¨
+    // STEP 1ï¼šç›¸æœºå†…å‚æ ‡å®š
     cameraCalib();
 
 
-    // STEP 2£ºÑÛÔÚÊÖÉÏ±ê¶¨
+    // STEP 2ï¼šçœ¼åœ¨æ‰‹ä¸Šæ ‡å®š
     std::cout << "========================" << std::endl;
-    std::cout << "       ÑÛÔÚÊÖÉÏ±ê¶¨     " << std::endl;
+    std::cout << "       çœ¼åœ¨æ‰‹ä¸Šæ ‡å®š     " << std::endl;
     std::cout << "========================" << std::endl;
 
-    // ¼ÆËãÏà»úÓë»úÆ÷ÈËÄ©¶ËÖ´ĞĞÆ÷Ö®¼äµÄ±ä»»¹ØÏµ
+    // è®¡ç®—ç›¸æœºä¸æœºå™¨äººæœ«ç«¯æ‰§è¡Œå™¨ä¹‹é—´çš„å˜æ¢å…³ç³»
     cv::Mat R_cam2gripper, t_cam2gripper;
 
-    // ×ª»»³Écv::MatĞÎÊ½µÄĞı×ª¾ØÕóºÍÆ½ÒÆÏòÁ¿
+    // è½¬æ¢æˆcv::Matå½¢å¼çš„æ—‹è½¬çŸ©é˜µå’Œå¹³ç§»å‘é‡
     std::vector<cv::Mat> R_tool, t_tool;
     for (const auto& pose : poses_)
     {
-        // ÌáÈ¡Ğı×ª¾ØÕó
+        // æå–æ—‹è½¬çŸ©é˜µ
         Eigen::Matrix3d rotation = pose.block<3, 3>(0, 0);
 
-        // ÌáÈ¡Æ½ÒÆÏòÁ¿
+        // æå–å¹³ç§»å‘é‡
         Eigen::Vector3d translation = pose.block<3, 1>(0, 3);
 
-        // ×ª»»³ÉmatĞÎÊ½
-        // Õâ±ßĞèÒª×ªÖÃÒ»ÏÂµÄÔ­ÒòÊÇÒòÎªEigenºÍMatµÄÅÅÁĞË³Ğò²»Ò»Ñù£¬EigenÊÇÁĞÖ÷Ğò£¬MatÊÇĞĞÖ÷Ğò¡£ 
+        // è½¬æ¢æˆmatå½¢å¼
+        // è¿™è¾¹éœ€è¦è½¬ç½®ä¸€ä¸‹çš„åŸå› æ˜¯å› ä¸ºEigenå’ŒMatçš„æ’åˆ—é¡ºåºä¸ä¸€æ ·ï¼ŒEigenæ˜¯åˆ—ä¸»åºï¼ŒMatæ˜¯è¡Œä¸»åºã€‚ 
         /*
-        * Ò²¾ÍÊÇËµ Eigen ÀïÃæÄÚ´æµÄÅÅÁĞË³ĞòÊÇ :
+        * ä¹Ÿå°±æ˜¯è¯´ Eigen é‡Œé¢å†…å­˜çš„æ’åˆ—é¡ºåºæ˜¯ :
         * [0] = rotation[0][0]
         * [1] = rotation[1][0]
         * [2] = rotation[2][0]
@@ -337,7 +337,7 @@ Eigen::Matrix4d HandEyeCalib::computeEyeInHandT(cv::HandEyeCalibrationMethod met
         * [4] = rotation[0][1]
         * ...
         * 
-        * ËùÒÔÕâ±ßÎªÁËÖ±½ÓÊ¹ÓÃdata(),ÏÈ½«rotationÏÈ·­×ªÒ»ÏÂ
+        * æ‰€ä»¥è¿™è¾¹ä¸ºäº†ç›´æ¥ä½¿ç”¨data(),å…ˆå°†rotationå…ˆç¿»è½¬ä¸€ä¸‹
         */ 
         Eigen::Matrix3d rotationTemp = rotation.transpose();
         cv::Mat rotationMat(3, 3, CV_64F, rotationTemp.data());
@@ -352,7 +352,7 @@ Eigen::Matrix4d HandEyeCalib::computeEyeInHandT(cv::HandEyeCalibrationMethod met
     cv::calibrateHandEye(R_tool, t_tool, rvecs_, tvecs_,
         R_cam2gripper, t_cam2gripper, method);
 
-    // ¼ÆËãÆ½¾ùĞı×ª¾ØÕóºÍÎ»ÒÆÏòÁ¿
+    // è®¡ç®—å¹³å‡æ—‹è½¬çŸ©é˜µå’Œä½ç§»å‘é‡
     cv::Mat final_R = cv::Mat::zeros(3, 3, CV_64F);
     cv::Mat final_t = cv::Mat::zeros(3, 1, CV_64F);
 
@@ -361,14 +361,14 @@ Eigen::Matrix4d HandEyeCalib::computeEyeInHandT(cv::HandEyeCalibrationMethod met
         final_t += t_tool[i];
     }
 
-    // ´òÓ¡×îÖÕ½á¹û
-    std::cout << "R_cam2gripper (Æ½¾ùĞı×ª¾ØÕó):\n" << R_cam2gripper << std::endl;
-    std::cout << "t_cam2gripper (Æ½¾ùÆ½ÒÆÏòÁ¿):\n" << t_cam2gripper << std::endl;
+    // æ‰“å°æœ€ç»ˆç»“æœ
+    std::cout << "R_cam2gripper (å¹³å‡æ—‹è½¬çŸ©é˜µ):\n" << R_cam2gripper << std::endl;
+    std::cout << "t_cam2gripper (å¹³å‡å¹³ç§»å‘é‡):\n" << t_cam2gripper << std::endl;
 
-    // ½«cv::Mat ×ª»»Îª Eigen::Matrix4d
-    Eigen::Matrix4d eyeInHandT = Eigen::Matrix4d::Identity();    // ³õÊ¼»¯Îªµ¥Î»¾ØÕó
+    // å°†cv::Mat è½¬æ¢ä¸º Eigen::Matrix4d
+    Eigen::Matrix4d eyeInHandT = Eigen::Matrix4d::Identity();    // åˆå§‹åŒ–ä¸ºå•ä½çŸ©é˜µ
 
-    // ½«Ğı×ª¾ØÕóÌîÈë
+    // å°†æ—‹è½¬çŸ©é˜µå¡«å…¥
     for (int i = 0; i < 3; ++i)
     {
         for (int j = 0; j < 3; ++j)
@@ -377,7 +377,7 @@ Eigen::Matrix4d HandEyeCalib::computeEyeInHandT(cv::HandEyeCalibrationMethod met
         }
     }
 
-    // ½«Æ½ÒÆÏòÁ¿ÌîÈë
+    // å°†å¹³ç§»å‘é‡å¡«å…¥
     for (int i = 0; i < 3; ++i)
     {
         eyeInHandT(i, 3) = t_cam2gripper.at<double>(i, 0);
@@ -388,36 +388,36 @@ Eigen::Matrix4d HandEyeCalib::computeEyeInHandT(cv::HandEyeCalibrationMethod met
 
 Eigen::Matrix4d HandEyeCalib::computeEyeToHandT(cv::HandEyeCalibrationMethod method)
 {
-    // STEP 1£ºÏà»úÄÚ²Î±ê¶¨
+    // STEP 1ï¼šç›¸æœºå†…å‚æ ‡å®š
     cameraCalib();
 
-    // STEP 2£ºÑÛÔÚÊÖÍâ±ê¶¨
+    // STEP 2ï¼šçœ¼åœ¨æ‰‹å¤–æ ‡å®š
     std::cout << "========================" << std::endl;
-    std::cout << "       ÑÛÔÚÊÖÍâ±ê¶¨     " << std::endl;
+    std::cout << "       çœ¼åœ¨æ‰‹å¤–æ ‡å®š     " << std::endl;
     std::cout << "========================" << std::endl;
 
 
-    // ¼ÆËãÏà»úÓë»úĞµ±Û»ù×ùÖ®¼äµÄ±ä»»¹ØÏµ
+    // è®¡ç®—ç›¸æœºä¸æœºæ¢°è‡‚åŸºåº§ä¹‹é—´çš„å˜æ¢å…³ç³»
     cv::Mat R_cam2base, t_cam2base;
 
-    // ×ª»»³Écv::MatĞÎÊ½µÄĞı×ª¾ØÕóºÍÆ½ÒÆÏòÁ¿
+    // è½¬æ¢æˆcv::Matå½¢å¼çš„æ—‹è½¬çŸ©é˜µå’Œå¹³ç§»å‘é‡
     std::vector<cv::Mat> R_tool, t_tool;
     for (const auto& pose : poses_)
     {
-        // ÒòÎªµÃµ½µÄposeÊÇ »úĞµ±ÛÄ©¶Ëµ½»úĞµ±Û»ù×ùµÄ±ä»»¾ØÕó
-        // È»ºóÏÖÔÚ¼ÆËãµÄÊÇÑÛÔÚÊÖÍâ£¬ËùÒÔĞèÒª¼ÆËã »úĞµ±Û»ù×ùµ½»úĞµ±ÛÄ©¶ËµÄ±ä»»¾ØÕó
+        // å› ä¸ºå¾—åˆ°çš„poseæ˜¯ æœºæ¢°è‡‚æœ«ç«¯åˆ°æœºæ¢°è‡‚åŸºåº§çš„å˜æ¢çŸ©é˜µ
+        // ç„¶åç°åœ¨è®¡ç®—çš„æ˜¯çœ¼åœ¨æ‰‹å¤–ï¼Œæ‰€ä»¥éœ€è¦è®¡ç®— æœºæ¢°è‡‚åŸºåº§åˆ°æœºæ¢°è‡‚æœ«ç«¯çš„å˜æ¢çŸ©é˜µ
         Eigen::Matrix4d baseToEnd = pose.inverse();
 
-        // ÌáÈ¡Ğı×ª¾ØÕó
+        // æå–æ—‹è½¬çŸ©é˜µ
         Eigen::Matrix3d rotation = baseToEnd.block<3, 3>(0, 0);
 
-        // ÌáÈ¡Æ½ÒÆÏòÁ¿
+        // æå–å¹³ç§»å‘é‡
         Eigen::Vector3d translation = baseToEnd.block<3, 1>(0, 3);
 
-        // ×ª»»³ÉmatĞÎÊ½
-        // Õâ±ßĞèÒª×ªÖÃÒ»ÏÂµÄÔ­ÒòÊÇÒòÎªEigenºÍMatµÄÅÅÁĞË³Ğò²»Ò»Ñù£¬EigenÊÇÁĞÖ÷Ğò£¬MatÊÇĞĞÖ÷Ğò¡£ 
+        // è½¬æ¢æˆmatå½¢å¼
+        // è¿™è¾¹éœ€è¦è½¬ç½®ä¸€ä¸‹çš„åŸå› æ˜¯å› ä¸ºEigenå’ŒMatçš„æ’åˆ—é¡ºåºä¸ä¸€æ ·ï¼ŒEigenæ˜¯åˆ—ä¸»åºï¼ŒMatæ˜¯è¡Œä¸»åºã€‚ 
         /*
-        * Ò²¾ÍÊÇËµ Eigen ÀïÃæÄÚ´æµÄÅÅÁĞË³ĞòÊÇ :
+        * ä¹Ÿå°±æ˜¯è¯´ Eigen é‡Œé¢å†…å­˜çš„æ’åˆ—é¡ºåºæ˜¯ :
         * [0] = rotation[0][0]
         * [1] = rotation[1][0]
         * [2] = rotation[2][0]
@@ -425,7 +425,7 @@ Eigen::Matrix4d HandEyeCalib::computeEyeToHandT(cv::HandEyeCalibrationMethod met
         * [4] = rotation[0][1]
         * ...
         *
-        * ËùÒÔÕâ±ßÎªÁËÖ±½ÓÊ¹ÓÃdata(),ÏÈ½«rotationÏÈ·­×ªÒ»ÏÂ
+        * æ‰€ä»¥è¿™è¾¹ä¸ºäº†ç›´æ¥ä½¿ç”¨data(),å…ˆå°†rotationå…ˆç¿»è½¬ä¸€ä¸‹
         */
         Eigen::Matrix3d rotationTemp = rotation.transpose();
         cv::Mat rotationMat(3, 3, CV_64F, rotationTemp.data());
@@ -440,7 +440,7 @@ Eigen::Matrix4d HandEyeCalib::computeEyeToHandT(cv::HandEyeCalibrationMethod met
     cv::calibrateHandEye(R_tool, t_tool, rvecs_, tvecs_,
         R_cam2base, t_cam2base, method);
 
-    // ¼ÆËãÆ½¾ùĞı×ª¾ØÕóºÍÎ»ÒÆÏòÁ¿
+    // è®¡ç®—å¹³å‡æ—‹è½¬çŸ©é˜µå’Œä½ç§»å‘é‡
     cv::Mat final_R = cv::Mat::zeros(3, 3, CV_64F);
     cv::Mat final_t = cv::Mat::zeros(3, 1, CV_64F);
 
@@ -449,14 +449,14 @@ Eigen::Matrix4d HandEyeCalib::computeEyeToHandT(cv::HandEyeCalibrationMethod met
         final_t += t_tool[i];
     }
 
-    // ´òÓ¡×îÖÕ½á¹û
-    std::cout << "R_cam2base (Æ½¾ùĞı×ª¾ØÕó):\n" << R_cam2base << std::endl;
-    std::cout << "t_cam2base (Æ½¾ùÆ½ÒÆÏòÁ¿):\n" << t_cam2base << std::endl;
+    // æ‰“å°æœ€ç»ˆç»“æœ
+    std::cout << "R_cam2base (å¹³å‡æ—‹è½¬çŸ©é˜µ):\n" << R_cam2base << std::endl;
+    std::cout << "t_cam2base (å¹³å‡å¹³ç§»å‘é‡):\n" << t_cam2base << std::endl;
 
-    // ½«cv::Mat ×ª»»Îª Eigen::Matrix4d
-    Eigen::Matrix4d eyeToHandT = Eigen::Matrix4d::Identity();    // ³õÊ¼»¯Îªµ¥Î»¾ØÕó
+    // å°†cv::Mat è½¬æ¢ä¸º Eigen::Matrix4d
+    Eigen::Matrix4d eyeToHandT = Eigen::Matrix4d::Identity();    // åˆå§‹åŒ–ä¸ºå•ä½çŸ©é˜µ
 
-    // ½«Ğı×ª¾ØÕóÌîÈë
+    // å°†æ—‹è½¬çŸ©é˜µå¡«å…¥
     for (int i = 0; i < 3; ++i)
     {
         for (int j = 0; j < 3; ++j)
@@ -465,7 +465,7 @@ Eigen::Matrix4d HandEyeCalib::computeEyeToHandT(cv::HandEyeCalibrationMethod met
         }
     }
 
-    // ½«Æ½ÒÆÏòÁ¿ÌîÈë
+    // å°†å¹³ç§»å‘é‡å¡«å…¥
     for (int i = 0; i < 3; ++i)
     {
         eyeToHandT(i, 3) = t_cam2base.at<double>(i, 0);
