@@ -50,7 +50,7 @@ if(DEFINED ENV{COLCON_PREFIX_PATH})
     install(
         DIRECTORY ${PROJECT_SOURCE_DIR}/
         DESTINATION include
-        FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp"
+        FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp" PATTERN "*.txt"
     )
 else()
     # 非 ROS 环境
