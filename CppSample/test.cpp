@@ -11,7 +11,7 @@ int main(int argc, char** argv) {
     //    return -1;
     //}
 
-    std::string ipAdd = "192.168.205.133";                                         // ip地址
+    std::string ipAdd = "192.168.1.133";                                         // ip地址
     if (!robot->loadConfigure("CS_UserManual_Robot_State_Message.txt")) {          // 加载配置文件
         std::cout << "Load Configure file fail. Check file path" << std::endl;
         return -1;
