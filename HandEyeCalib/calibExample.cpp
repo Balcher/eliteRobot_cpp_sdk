@@ -7,7 +7,7 @@
 int main()
 {
 	std::cout << "cv version = " << CV_VERSION << std::endl;
-	std::string Fileroot = "D:\\gitResository\\eliteRobot_cpp_sdk\\HandEyeCalib\\calib2.26\\";
+	std::string Fileroot = "/home/yuan/Documents/ros2-amr/3rdParty/eliteRobot_cpp_sdk/HandEyeCalib/calib4.7/";
 
 	//// 将位姿保存到csv文件中测试（实际没有什么用，测试用）
 	std::string filePath = Fileroot + "poses.txt";

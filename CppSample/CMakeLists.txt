@@ -47,3 +47,20 @@ else()
     )
 endif()
 
+# 打印机器人关节姿态
+add_executable(test
+    ${PROJECT_SOURCE_DIR}/test.cpp
+)
+
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    target_link_libraries(
+        test
+        elite_robot_state
+        pthread
+    )
+else()
+    target_link_libraries(
+        test
+        elite_robot_state
+    )
+endif()

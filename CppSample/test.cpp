@@ -58,7 +58,7 @@ int main(int argc, char** argv) {
 
     // 获取姿态位置
     std::vector<double> TcpPositions = robot->getTcpPosition();
-    std::cout << "x  y  z(mm)  rx  ry  rz(rad)" << std::endl;
+    std::cout << "x  y  z(m)  rx  ry  rz(rad)" << std::endl;
     for (auto TcpPosition : TcpPositions)
     {
         std::cout << TcpPosition << " ";
@@ -77,7 +77,7 @@ int main(int argc, char** argv) {
         if (!robot->isConnect()) {
             return 0;
         }
-        joint = robot->getJointActualPos();                                       // 获取机器人的位姿
+        joint = robot->getTcpPosition();                                       // 获取机器人的TCP姿态
 
         // 获取打印机器人关节位置
         for (auto item : joint) {
