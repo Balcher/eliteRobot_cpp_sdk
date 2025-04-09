@@ -1,7 +1,7 @@
 ﻿#include "RobotInterface.hpp"
 #include <sstream>
 
-void RobotInterface::robotMove(const std::vector<double>& angles, double acceleration, double velocity, double time, double r)
+void RobotInterface::robotMove(const std::vector<double> &angles, double acceleration, double velocity, double time, double r)
 {
     std::ostringstream script;
 
@@ -9,9 +9,35 @@ void RobotInterface::robotMove(const std::vector<double>& angles, double acceler
     script << "\tmovej([";
 
     // 添加角度值
-    for (size_t i = 0; i < angles.size(); ++i) {
+    for (size_t i = 0; i < angles.size(); ++i)
+    {
         script << angles[i];
-        if (i < angles.size() - 1) {
+        if (i < angles.size() - 1)
+        {
+            script << ",";
+        }
+    }
+
+    script << "],a=" << acceleration << ",v=" << velocity << ",t=" << time << ",r=" << r << ")\n";
+    script << "end";
+
+    this->sendScript(script.str());
+}
+
+void RobotInterface::robotMovel(const std::vector<double> &poses, double acceleration,
+                                double velocity, double time, double r)
+{
+    std::ostringstream script;
+
+    script << "def move():\n";
+    script << "\tmovel([";
+
+    // 添加目标点的工具位姿
+    for (size_t i = 0; i < poses.size(); ++i)
+    {
+        script << poses[i];
+        if (i < poses.size() - 1)
+        {
             script << ",";
         }
     }
@@ -26,7 +52,8 @@ RobotInterface::RobotInterface() {}
 
 RobotInterface::~RobotInterface() {}
 
-uint64_t RobotInterface::getTimeStamp() {
+uint64_t RobotInterface::getTimeStamp()
+{
     uint64_t timestamp = 0;
     getItemData("timestamp", &timestamp);
     return timestamp;
@@ -42,11 +69,13 @@ bool RobotInterface::isProgramRunning() { return getItemData<bool>("Robot_mode_i
 
 bool RobotInterface::isProgramPaused() { return getItemData<bool>("Robot_mode_is_program_paused", nullptr); }
 
-RobotInterface::RobotMode RobotInterface::getRobotMode() {
+RobotInterface::RobotMode RobotInterface::getRobotMode()
+{
     return (RobotMode)getItemData<uint8_t>("Robot_mode_get_robot_mode", nullptr);
 }
 
-RobotInterface::RobotControlMode RobotInterface::getRobotControlMode() {
+RobotInterface::RobotControlMode RobotInterface::getRobotControlMode()
+{
     return (RobotControlMode)getItemData<uint8_t>("Robot_mode_get_robot_control_mode", nullptr);
 }
 
@@ -54,11 +83,13 @@ double RobotInterface::getTargetSpeedFraction() { return getItemData<double>("Ro
 
 double RobotInterface::getSpeedScaling() { return getItemData<double>("Robot_mode_get_speed_scaling", nullptr); }
 
-double RobotInterface::getTargetSpeedFractionLimit() {
+double RobotInterface::getTargetSpeedFractionLimit()
+{
     return getItemData<double>("Robot_mode_get_target_speed_fraction_limit", nullptr);
 }
 
-RobotInterface::RobotSpeedMode RobotInterface::getRobotSpeedMode() {
+RobotInterface::RobotSpeedMode RobotInterface::getRobotSpeedMode()
+{
     return (RobotSpeedMode)getItemData<uint8_t>("Robot_mode_get_robot_speed_mode", nullptr);
 }
 
@@ -66,73 +97,85 @@ bool RobotInterface::isRobotSystemInAlarm() { return getItemData<bool>("Robot_mo
 
 bool RobotInterface::isInPackageMode() { return getItemData<bool>("Robot_mode_is_in_package_mode", nullptr); }
 
-std::vector<double> RobotInterface::getJointActualPos() {
-    const char* joints[] = {"Joint_actual_joint0", "Joint_actual_joint1", "Joint_actual_joint2",
+std::vector<double> RobotInterface::getJointActualPos()
+{
+    const char *joints[] = {"Joint_actual_joint0", "Joint_actual_joint1", "Joint_actual_joint2",
                             "Joint_actual_joint3", "Joint_actual_joint4", "Joint_actual_joint5"};
     return getStatesVector<double>(joints, 6);
 }
 
-std::vector<double> RobotInterface::getJointTargetPos() {
-    const char* joints[] = {"Joint_target_joint0", "Joint_target_joint1", "Joint_target_joint2",
+std::vector<double> RobotInterface::getJointTargetPos()
+{
+    const char *joints[] = {"Joint_target_joint0", "Joint_target_joint1", "Joint_target_joint2",
                             "Joint_target_joint3", "Joint_target_joint4", "Joint_target_joint5"};
     return getStatesVector<double>(joints, 6);
 }
 
-std::vector<double> RobotInterface::getJointActualVelocity() {
-    const char* joints[] = {"Joint_target_pluse0", "Joint_target_pluse1", "Joint_target_pluse2",
+std::vector<double> RobotInterface::getJointActualVelocity()
+{
+    const char *joints[] = {"Joint_target_pluse0", "Joint_target_pluse1", "Joint_target_pluse2",
                             "Joint_target_pluse3", "Joint_target_pluse4", "Joint_target_pluse5"};
     return getStatesVector<double>(joints, 6);
 }
 
-std::vector<int32_t> RobotInterface::getJointTargetPluse() {
-    const char* joints[] = {"Joint_target_pluse0", "Joint_target_pluse1", "Joint_target_pluse2",
+std::vector<int32_t> RobotInterface::getJointTargetPluse()
+{
+    const char *joints[] = {"Joint_target_pluse0", "Joint_target_pluse1", "Joint_target_pluse2",
                             "Joint_target_pluse3", "Joint_target_pluse4", "Joint_target_pluse5"};
     return getStatesVector<int32_t>(joints, 6);
 }
 
-std::vector<int32_t> RobotInterface::getJointActualPluse() {
-    const char* joints[] = {"Joint_actual_pluse0", "Joint_actual_pluse1", "Joint_actual_pluse2",
+std::vector<int32_t> RobotInterface::getJointActualPluse()
+{
+    const char *joints[] = {"Joint_actual_pluse0", "Joint_actual_pluse1", "Joint_actual_pluse2",
                             "Joint_actual_pluse3", "Joint_actual_pluse4", "Joint_actual_pluse5"};
     return getStatesVector<int32_t>(joints, 6);
 }
 
-std::vector<int32_t> RobotInterface::getJointZeroPluse() {
-    const char* joints[] = {"Joint_zero_pluse0", "Joint_zero_pluse1", "Joint_zero_pluse2",
+std::vector<int32_t> RobotInterface::getJointZeroPluse()
+{
+    const char *joints[] = {"Joint_zero_pluse0", "Joint_zero_pluse1", "Joint_zero_pluse2",
                             "Joint_zero_pluse3", "Joint_zero_pluse4", "Joint_zero_pluse5"};
     return getStatesVector<int32_t>(joints, 6);
 }
 
-std::vector<float> RobotInterface::getJointCurrent() {
-    const char* joints[] = {"Joint_current0", "Joint_current1", "Joint_current2",
+std::vector<float> RobotInterface::getJointCurrent()
+{
+    const char *joints[] = {"Joint_current0", "Joint_current1", "Joint_current2",
                             "Joint_current3", "Joint_current4", "Joint_current5"};
     return getStatesVector<float>(joints, 6);
 }
 
-std::vector<float> RobotInterface::getJointVoltage() {
-    const char* joints[] = {"Joint_voltage0", "Joint_voltage1", "Joint_voltage2",
+std::vector<float> RobotInterface::getJointVoltage()
+{
+    const char *joints[] = {"Joint_voltage0", "Joint_voltage1", "Joint_voltage2",
                             "Joint_voltage3", "Joint_voltage4", "Joint_voltage5"};
     return getStatesVector<float>(joints, 6);
 }
 
-std::vector<float> RobotInterface::getJointTemperature() {
-    const char* joints[] = {"Joint_temperature0", "Joint_temperature1", "Joint_temperature2",
+std::vector<float> RobotInterface::getJointTemperature()
+{
+    const char *joints[] = {"Joint_temperature0", "Joint_temperature1", "Joint_temperature2",
                             "Joint_temperature3", "Joint_temperature4", "Joint_temperature5"};
     return getStatesVector<float>(joints, 6);
 }
 
-std::vector<float> RobotInterface::getJointTorques() {
-    const char* joints[] = {"Joint_torques0", "Joint_torques1", "Joint_torques2",
+std::vector<float> RobotInterface::getJointTorques()
+{
+    const char *joints[] = {"Joint_torques0", "Joint_torques1", "Joint_torques2",
                             "Joint_torques3", "Joint_torques4", "Joint_torques5"};
     return getStatesVector<float>(joints, 6);
 }
 
-std::vector<RobotInterface::JointMode> RobotInterface::getJointMode() {
-    const char* joints[] = {"Joint_torques0", "Joint_torques1", "Joint_torques2",
+std::vector<RobotInterface::JointMode> RobotInterface::getJointMode()
+{
+    const char *joints[] = {"Joint_torques0", "Joint_torques1", "Joint_torques2",
                             "Joint_torques3", "Joint_torques4", "Joint_torques5"};
     return getStatesVector<JointMode>(joints, 6);
 }
 
-std::vector<double> RobotInterface::getTcpPosition() {
+std::vector<double> RobotInterface::getTcpPosition()
+{
     std::vector<double> result;
     double value = getItemData<double>("Cartesian_tcp_x", nullptr);
     result.push_back(value);
@@ -149,7 +192,8 @@ std::vector<double> RobotInterface::getTcpPosition() {
     return result;
 }
 
-std::vector<double> RobotInterface::getTcpOffset() {
+std::vector<double> RobotInterface::getTcpOffset()
+{
     std::vector<double> result;
     double value = getItemData<double>("Cartesian_offset_px", nullptr);
     result.push_back(value);
@@ -166,29 +210,33 @@ std::vector<double> RobotInterface::getTcpOffset() {
     return result;
 }
 
-std::vector<double> RobotInterface::getLimitMinJoint() {
-    const char* joints[] = {"Robot_configure_limit_min_joint_x0", "Robot_configure_limit_min_joint_x1",
+std::vector<double> RobotInterface::getLimitMinJoint()
+{
+    const char *joints[] = {"Robot_configure_limit_min_joint_x0", "Robot_configure_limit_min_joint_x1",
                             "Robot_configure_limit_min_joint_x2", "Robot_configure_limit_min_joint_x3",
                             "Robot_configure_limit_min_joint_x4", "Robot_configure_limit_min_joint_x5"};
     return getStatesVector<double>(joints, 6);
 }
 
-std::vector<double> RobotInterface::getLimitMaxJoint() {
-    const char* joints[] = {"Robot_configure_limit_max_joint_x0", "Robot_configure_limit_max_joint_x1",
+std::vector<double> RobotInterface::getLimitMaxJoint()
+{
+    const char *joints[] = {"Robot_configure_limit_max_joint_x0", "Robot_configure_limit_max_joint_x1",
                             "Robot_configure_limit_max_joint_x2", "Robot_configure_limit_max_joint_x3",
                             "Robot_configure_limit_max_joint_x4", "Robot_configure_limit_max_joint_x5"};
     return getStatesVector<double>(joints, 6);
 }
 
-std::vector<double> RobotInterface::getMaxVelocityJoint() {
-    const char* joints[] = {"Robot_configure_max_velocity_joint_x0", "Robot_configure_max_velocity_joint_x1",
+std::vector<double> RobotInterface::getMaxVelocityJoint()
+{
+    const char *joints[] = {"Robot_configure_max_velocity_joint_x0", "Robot_configure_max_velocity_joint_x1",
                             "Robot_configure_max_velocity_joint_x2", "Robot_configure_max_velocity_joint_x3",
                             "Robot_configure_max_velocity_joint_x4", "Robot_configure_max_velocity_joint_x5"};
     return getStatesVector<double>(joints, 6);
 }
 
-std::vector<double> RobotInterface::getMaxAccJoint() {
-    const char* joints[] = {"Robot_configure_max_acc_joint_x0", "Robot_configure_max_acc_joint_x1",
+std::vector<double> RobotInterface::getMaxAccJoint()
+{
+    const char *joints[] = {"Robot_configure_max_acc_joint_x0", "Robot_configure_max_acc_joint_x1",
                             "Robot_configure_max_acc_joint_x2", "Robot_configure_max_acc_joint_x3",
                             "Robot_configure_max_acc_joint_x4", "Robot_configure_max_acc_joint_x5"};
     return getStatesVector<double>(joints, 6);
@@ -204,20 +252,23 @@ double RobotInterface::getDefaultToolAcc() { return getItemData<double>("Robot_c
 
 double RobotInterface::getEqRadius() { return getItemData<double>("Robot_configure_eq_radius", nullptr); }
 
-std::vector<double> RobotInterface::getDhAJoint() {
-    const char* joints[] = {"Robot_configure_dh_a_joint_x0", "Robot_configure_dh_a_joint_x1", "Robot_configure_dh_a_joint_x2",
+std::vector<double> RobotInterface::getDhAJoint()
+{
+    const char *joints[] = {"Robot_configure_dh_a_joint_x0", "Robot_configure_dh_a_joint_x1", "Robot_configure_dh_a_joint_x2",
                             "Robot_configure_dh_a_joint_x3", "Robot_configure_dh_a_joint_x4", "Robot_configure_dh_a_joint_x5"};
     return getStatesVector<double>(joints, 6);
 }
 
-std::vector<double> RobotInterface::getDhDJoint() {
-    const char* joints[] = {"Robot_configure_dh_d_joint_d0", "Robot_configure_dh_d_joint_d1", "Robot_configure_dh_d_joint_d2",
+std::vector<double> RobotInterface::getDhDJoint()
+{
+    const char *joints[] = {"Robot_configure_dh_d_joint_d0", "Robot_configure_dh_d_joint_d1", "Robot_configure_dh_d_joint_d2",
                             "Robot_configure_dh_d_joint_d3", "Robot_configure_dh_d_joint_d4", "Robot_configure_dh_d_joint_d5"};
     return getStatesVector<double>(joints, 6);
 }
 
-std::vector<double> RobotInterface::getDhAlphaJoint() {
-    const char* joints[] = {"Robot_configure_dh_alpha_joint_x0", "Robot_configure_dh_alpha_joint_x1",
+std::vector<double> RobotInterface::getDhAlphaJoint()
+{
+    const char *joints[] = {"Robot_configure_dh_alpha_joint_x0", "Robot_configure_dh_alpha_joint_x1",
                             "Robot_configure_dh_alpha_joint_x2", "Robot_configure_dh_alpha_joint_x3",
                             "Robot_configure_dh_alpha_joint_x4", "Robot_configure_dh_alpha_joint_x5"};
     return getStatesVector<double>(joints, 6);
@@ -229,12 +280,14 @@ uint32_t RobotInterface::getControlBoxType() { return getItemData<uint32_t>("Rob
 
 RobotInterface::RobotType RobotInterface::getRobotType() { return getItemData<RobotType>("Robot_configure_robot_type", nullptr); }
 
-RobotInterface::RobotStruct RobotInterface::getRobotStruct() {
+RobotInterface::RobotStruct RobotInterface::getRobotStruct()
+{
     return getItemData<RobotStruct>("Robot_configure_robot_struct", nullptr);
 }
 
 #pragma pack(1)
-struct DigitalBits {
+struct DigitalBits
+{
     bool standard0 : 1;
     bool standard1 : 1;
     bool standard2 : 1;
@@ -273,9 +326,10 @@ struct DigitalBits {
 };
 #pragma pack()
 
-std::vector<bool> RobotInterface::getStandardDigitalInput() {
+std::vector<bool> RobotInterface::getStandardDigitalInput()
+{
     uint32_t digital = getItemData<uint32_t>("Robot_motherboard_digital_input_bits", nullptr);
-    DigitalBits* bits = (DigitalBits*)&digital;
+    DigitalBits *bits = (DigitalBits *)&digital;
     std::vector<bool> result(16);
     result.push_back(bits->standard0);
     result.push_back(bits->standard2);
@@ -295,9 +349,10 @@ std::vector<bool> RobotInterface::getStandardDigitalInput() {
     return result;
 }
 
-std::vector<bool> RobotInterface::getStandardDigitalOutput() {
+std::vector<bool> RobotInterface::getStandardDigitalOutput()
+{
     uint32_t digital = getItemData<uint32_t>("Robot_motherboard_digital_output_bits", nullptr);
-    DigitalBits* bits = (DigitalBits*)&digital;
+    DigitalBits *bits = (DigitalBits *)&digital;
     std::vector<bool> result(16);
     result.push_back(bits->standard0);
     result.push_back(bits->standard2);
@@ -317,9 +372,10 @@ std::vector<bool> RobotInterface::getStandardDigitalOutput() {
     return result;
 }
 
-std::vector<bool> RobotInterface::getConfigureDigitalInput() {
+std::vector<bool> RobotInterface::getConfigureDigitalInput()
+{
     uint32_t digital = getItemData<uint32_t>("Robot_motherboard_digital_input_bits", nullptr);
-    DigitalBits* bits = (DigitalBits*)&digital;
+    DigitalBits *bits = (DigitalBits *)&digital;
     std::vector<bool> result(8);
     result.push_back(bits->configure0);
     result.push_back(bits->configure1);
@@ -332,9 +388,10 @@ std::vector<bool> RobotInterface::getConfigureDigitalInput() {
     return result;
 }
 
-std::vector<bool> RobotInterface::getConfigureDigitalOutput() {
+std::vector<bool> RobotInterface::getConfigureDigitalOutput()
+{
     uint32_t digital = getItemData<uint32_t>("Robot_motherboard_digital_output_bits", nullptr);
-    DigitalBits* bits = (DigitalBits*)&digital;
+    DigitalBits *bits = (DigitalBits *)&digital;
     std::vector<bool> result(8);
     result.push_back(bits->configure0);
     result.push_back(bits->configure1);
@@ -347,9 +404,10 @@ std::vector<bool> RobotInterface::getConfigureDigitalOutput() {
     return result;
 }
 
-std::vector<bool> RobotInterface::getToolDigitalInput() {
+std::vector<bool> RobotInterface::getToolDigitalInput()
+{
     uint32_t digital = getItemData<uint32_t>("Robot_motherboard_digital_input_bits", nullptr);
-    DigitalBits* bits = (DigitalBits*)&digital;
+    DigitalBits *bits = (DigitalBits *)&digital;
     std::vector<bool> result(4);
     result.push_back(bits->tool0);
     result.push_back(bits->tool1);
@@ -358,9 +416,10 @@ std::vector<bool> RobotInterface::getToolDigitalInput() {
     return result;
 }
 
-std::vector<bool> RobotInterface::getToolDigitalOutput() {
+std::vector<bool> RobotInterface::getToolDigitalOutput()
+{
     uint32_t digital = getItemData<uint32_t>("Robot_motherboard_digital_output_bits", nullptr);
-    DigitalBits* bits = (DigitalBits*)&digital;
+    DigitalBits *bits = (DigitalBits *)&digital;
     std::vector<bool> result(4);
     result.push_back(bits->tool0);
     result.push_back(bits->tool1);
@@ -369,47 +428,55 @@ std::vector<bool> RobotInterface::getToolDigitalOutput() {
     return result;
 }
 
-std::vector<RobotInterface::AnalogMode> RobotInterface::getStandardAnalogOutputMode() {
+std::vector<RobotInterface::AnalogMode> RobotInterface::getStandardAnalogOutputMode()
+{
     std::vector<AnalogMode> result;
     result.push_back(getItemData<AnalogMode>("Robot_motherboard_standard_analog_output_domain0", nullptr));
     result.push_back(getItemData<AnalogMode>("Robot_motherboard_standard_analog_output_domain1", nullptr));
     return result;
 }
 
-std::vector<RobotInterface::AnalogMode> RobotInterface::getStandardAnalogInputMode() {
+std::vector<RobotInterface::AnalogMode> RobotInterface::getStandardAnalogInputMode()
+{
     std::vector<AnalogMode> result;
     result.push_back(getItemData<AnalogMode>("Robot_motherboard_standard_analog_output_domain0", nullptr));
     result.push_back(getItemData<AnalogMode>("Robot_motherboard_standard_analog_output_domain1", nullptr));
     return result;
 }
 
-RobotInterface::AnalogMode RobotInterface::getToolAnalogOutputMode() {
+RobotInterface::AnalogMode RobotInterface::getToolAnalogOutputMode()
+{
     return getItemData<AnalogMode>("Robot_motherboard_tool_analog_output_domain", nullptr);
 }
 
-RobotInterface::AnalogMode RobotInterface::getToolAnalogInputMode() {
+RobotInterface::AnalogMode RobotInterface::getToolAnalogInputMode()
+{
     return getItemData<AnalogMode>("Robot_motherboard_tool_analog_input_domain", nullptr);
 }
 
-std::vector<double> RobotInterface::getStandardAnalogOutputValue() {
+std::vector<double> RobotInterface::getStandardAnalogOutputValue()
+{
     std::vector<double> result;
     result.push_back(getItemData<double>("Robot_motherboard_standard_analog_output_value0", nullptr));
     result.push_back(getItemData<double>("Robot_motherboard_standard_analog_output_value1", nullptr));
     return result;
 }
 
-std::vector<double> RobotInterface::getStandardAnalogInputValue() {
+std::vector<double> RobotInterface::getStandardAnalogInputValue()
+{
     std::vector<double> result;
     result.push_back(getItemData<double>("Robot_motherboard_standard_analog_input_value0", nullptr));
     result.push_back(getItemData<double>("Robot_motherboard_standard_analog_input_value1", nullptr));
     return result;
 }
 
-double RobotInterface::getToolAnalogOutputValue() {
+double RobotInterface::getToolAnalogOutputValue()
+{
     return getItemData<double>("Robot_motherboard_tool_analog_output_value", nullptr);
 }
 
-double RobotInterface::getToolAnalogInputValue() {
+double RobotInterface::getToolAnalogInputValue()
+{
     return getItemData<double>("Robot_motherboard_tool_analog_input_value", nullptr);
 }
 
@@ -421,31 +488,37 @@ float RobotInterface::getRobotCurrent() { return getItemData<float>("Robot_mothe
 
 float RobotInterface::getIOCurrent() { return getItemData<float>("Robot_motherboard_io_current", nullptr); }
 
-RobotInterface::SafetyMode RobotInterface::getBordSafeMode() {
+RobotInterface::SafetyMode RobotInterface::getBordSafeMode()
+{
     return getItemData<SafetyMode>("Robot_motherboard_bord_safe_mode", nullptr);
 }
 
 bool RobotInterface::isRobotInReducedMode() { return getItemData<bool>("Robot_motherboard_is_robot_in_reduced_mode", nullptr); }
 
-bool RobotInterface::getOperationalModeSelectorInput() {
+bool RobotInterface::getOperationalModeSelectorInput()
+{
     return getItemData<bool>("Robot_motherboard_get_operational_mode_selector_input", nullptr);
 }
 
-bool RobotInterface::getThreepositionEnablingDeviceInput() {
+bool RobotInterface::getThreepositionEnablingDeviceInput()
+{
     return getItemData<bool>("Robot_motherboard_get_threeposition_enabling_device_input", nullptr);
 }
 
-RobotInterface::SafetyMode RobotInterface::getMasterboardSafetyMode() {
+RobotInterface::SafetyMode RobotInterface::getMasterboardSafetyMode()
+{
     return getItemData<SafetyMode>("Robot_motherboard_masterboard_safety_mode", nullptr);
 }
 
-bool RobotInterface::isFreedriveButtonPressed() {
+bool RobotInterface::isFreedriveButtonPressed()
+{
     return getItemData<bool>("Robot_motherboard_is_freedrive_button_pressed", nullptr);
 }
 
 bool RobotInterface::isFreedriveIOEnabled() { return getItemData<bool>("Robot_motherboard_is_freedrive_io_enabled", nullptr); }
 
-bool RobotInterface::isDynamicCollisionDetectEnabled() {
+bool RobotInterface::isDynamicCollisionDetectEnabled()
+{
     return getItemData<bool>("Robot_motherboard_is_dynamic_collision_detect_enabled", nullptr);
 }
 
@@ -453,7 +526,8 @@ float RobotInterface::getToolVoltage() { return getItemData<float>("Robot_tool_d
 
 float RobotInterface::getToolCurrent() { return getItemData<float>("Robot_tool_data_tool_current", nullptr); }
 
-RobotInterface::ToolOutputVoltage RobotInterface::getToolOutputVoltage() {
+RobotInterface::ToolOutputVoltage RobotInterface::getToolOutputVoltage()
+{
     return getItemData<ToolOutputVoltage>("Robot_tool_data_tool_output_voltage", nullptr);
 }
 
@@ -463,11 +537,13 @@ RobotInterface::ToolMode RobotInterface::getToolMode() { return getItemData<Tool
 
 uint32_t RobotInterface::getSafetyCRCNum() { return getItemData<uint32_t>("Robot_satety_mode_safety_crc_num", nullptr); }
 
-RobotInterface::SafeOptMode RobotInterface::getSafetyOperationalMode() {
+RobotInterface::SafeOptMode RobotInterface::getSafetyOperationalMode()
+{
     return getItemData<SafeOptMode>("Robot_satety_mode_safety_operational_mode", nullptr);
 }
 
-std::vector<double> RobotInterface::getCurrentElbowPos() {
+std::vector<double> RobotInterface::getCurrentElbowPos()
+{
     std::vector<double> result(2);
     result.push_back(getItemData<double>("Robot_satety_mode_current_elbow_position_x", nullptr));
     result.push_back(getItemData<double>("Robot_satety_mode_current_elbow_position_y", nullptr));
@@ -487,6 +563,7 @@ uint32_t RobotInterface::getToolRS485Stopbits() { return getItemData<bool>("Robo
 
 bool RobotInterface::isToolRS485ModbusMode() { return getItemData<bool>("Robot_communication_tci_modbus_status", nullptr); }
 
-RobotInterface::ToolRS485Usage RobotInterface::getToolRS485Usage() {
+RobotInterface::ToolRS485Usage RobotInterface::getToolRS485Usage()
+{
     return getItemData<ToolRS485Usage>("Robot_communication_tci_usage", nullptr);
 }

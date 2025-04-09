@@ -25,6 +25,13 @@ public:
 	/// @return 是否有解
 	bool getIKDegrees(const std::vector<double>& poses, std::vector<double>& degrees);
 
+    /// @brief 正运动学解算
+    /// @note 正运动学求解，通过关节角度获取位姿势，使用当前系统激活的TCP数据
+    /// @param degrees   机器人的关节角度，缺省值为当前机器人关节角度，单位为弧度
+    /// @param poses     位姿[x,y,z,r,p,y] 单位m和rad
+    /// @return 是否有解
+    bool getFKPose(const std::vector<double>& degrees, std::vector<double>& poses);
+
 	/// @brief 连接到指定的 IP 和端口
 	/// @param ip 目标 IP 地址
 	/// @param port 目标端口

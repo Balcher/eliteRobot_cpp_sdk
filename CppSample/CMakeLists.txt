@@ -64,3 +64,21 @@ else()
         elite_robot_state
     )
 endif()
+
+# movel控制方式测试
+add_executable(movel_test
+    ${PROJECT_SOURCE_DIR}/movel_test.cpp
+)
+
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    target_link_libraries(
+        movel_test
+        elite_robot_state
+        pthread
+    )
+else()
+    target_link_libraries(
+        movel_test
+        elite_robot_state
+    )
+endif()
