@@ -21,7 +21,7 @@ public:
 
 	/// @brief 逆运动学解算
 	/// @param poses     位姿[x,y,z,r,p,y] 单位m和rad
-	/// @param degrees   六个电机的角度值
+	/// @param degrees   六个电机的角度值(rad)
 	/// @return 是否有解
 	bool getIKDegrees(const std::vector<double>& poses, std::vector<double>& degrees);
 

@@ -162,7 +162,7 @@ int main()
         return -1;
     }
     // 移动
-    robot2->robotJointMove(degrees, acceleration, velocity, time, r); // 货物上方一米
+    robot2->robotJointMove(degrees, acceleration, velocity, time, r); // 上方0.5m处
     sleep(5);
 
     // 6. 到达抓取货物的地方
