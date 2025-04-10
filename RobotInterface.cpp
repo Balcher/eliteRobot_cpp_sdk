@@ -1,7 +1,7 @@
 ﻿#include "RobotInterface.hpp"
 #include <sstream>
 
-void RobotInterface::robotMove(const std::vector<double> &angles, double acceleration, double velocity, double time, double r)
+void RobotInterface::robotJointMove(const std::vector<double> &angles, double acceleration, double velocity, double time, double r)
 {
     std::ostringstream script;
 
@@ -24,7 +24,7 @@ void RobotInterface::robotMove(const std::vector<double> &angles, double acceler
     this->sendScript(script.str());
 }
 
-void RobotInterface::robotMovel(const std::vector<double> &poses, double acceleration,
+void RobotInterface::robotLinearMove(const std::vector<double> &poses, double acceleration,
                                 double velocity, double time, double r)
 {
     std::ostringstream script;

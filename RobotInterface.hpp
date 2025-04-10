@@ -17,7 +17,7 @@ class RobotInterface : public RobotState {
     /// @param velocity 关节速度，单位rad/s,double型数据
     /// @param time 时间，单位s，double型数据
     /// @param r 交融半径，单位m，double型数据，(指在机械臂从一个运动路径段过渡到下一个路径段时，用于平滑连接两段路径的区域的半径。)
-    void robotMove(const std::vector<double>& angles, double acceleration,
+    void robotJointMove(const std::vector<double>& angles, double acceleration,
         double velocity, double time, double r);
 
     /// @brief 控制机器人直线运动
@@ -26,7 +26,7 @@ class RobotInterface : public RobotState {
     /// @param velocity 关节速度，单位rad/s,double型数据
     /// @param time 时间，单位s，double型数据
     /// @param r 交融半径，单位m，double型数据，(指在机械臂从一个运动路径段过渡到下一个路径段时，用于平滑连接两段路径的区域的半径。)
-    void robotMovel(const std::vector<double>& poses, double acceleration,
+    void robotLinearMove(const std::vector<double>& poses, double acceleration,
         double velocity, double time, double r);
 
     /// @brief 获取时间戳

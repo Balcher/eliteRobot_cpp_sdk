@@ -42,7 +42,7 @@ int main(int argc, char** argv) {
     double time = 0;
     double r = 0;
 
-    robot->robotMove(angles, acceleration, velocity, time, r);
+    robot->robotJointMove(angles, acceleration, velocity, time, r);
 
     /////////////////////////////////////////////////////// 
     // 输出DH参数表

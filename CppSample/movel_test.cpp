@@ -80,7 +80,7 @@ int main()
     // //     double time = 0;
     // //     double r = 0;
 
-    // //     robot2->robotMove(degrees, acceleration, velocity, time, r);
+    // //     robot2->robotJointMove(degrees, acceleration, velocity, time, r);
     // // }
 
     ////////////////////////////////给位姿控制///////////////////////////////////////////
@@ -91,12 +91,12 @@ int main()
     // double velocity = 0.5;
     // double time = 0;
     // double r = 0;
-    // robot2->robotMovel(posesReset, acceleration, velocity, time, r);    // 复位摆放位置
+    // robot2->robotLinearMove(posesReset, acceleration, velocity, time, r);    // 复位摆放位置
     // sleep(10);
 
-    // robot2->robotMovel(moveToGrasp, acceleration, velocity, time, r);    // 从复位点移动出来
+    // robot2->robotLinearMove(moveToGrasp, acceleration, velocity, time, r);    // 从复位点移动出来
     // sleep(3);
-    // robot2->robotMovel(readyToGrasp, acceleration, velocity, time, r);    // 准备抓取位置
+    // robot2->robotLinearMove(readyToGrasp, acceleration, velocity, time, r);    // 准备抓取位置
 
     ////////////////////////////流程演示//////////////////////////////////////////
     std::vector<double> posesReset = {-0.48418, 0.14341, 0.21646, -3.130, 0.001, 1.629};  // 复位摆放位置
@@ -117,7 +117,7 @@ int main()
         return -1;
     }
     // 移动
-    robot2->robotMove(degrees, acceleration, velocity, time, r); // 复位摆放位置
+    robot2->robotJointMove(degrees, acceleration, velocity, time, r); // 复位摆放位置
     sleep(5);
 
     // 2. 从复位点移动出来
@@ -130,7 +130,7 @@ int main()
         return -1;
     }
     // 移动
-    robot2->robotMove(degrees, acceleration, velocity, time, r); // 从复位点移动出来
+    robot2->robotJointMove(degrees, acceleration, velocity, time, r); // 从复位点移动出来
     sleep(5);
 
     // 3. 准备抓取位置
@@ -143,7 +143,7 @@ int main()
         return -1;
     }
     // 移动
-    robot2->robotMove(degrees, acceleration, velocity, time, r); // 准备抓取位置
+    robot2->robotJointMove(degrees, acceleration, velocity, time, r); // 准备抓取位置
     sleep(5);
 
     // 4. 自定义一个货物的位置
@@ -162,15 +162,15 @@ int main()
         return -1;
     }
     // 移动
-    robot2->robotMove(degrees, acceleration, velocity, time, r); // 货物上方一米
+    robot2->robotJointMove(degrees, acceleration, velocity, time, r); // 货物上方一米
     sleep(5);
 
     // 6. 到达抓取货物的地方
-    robot2->robotMovel(cartonPosition, acceleration, velocity, time, r); // 直线运动到货物地方
+    robot2->robotLinearMove(cartonPosition, acceleration, velocity, time, r); // 直线运动到货物地方
     sleep(5);
 
     // 7. 返回到货物上方1m处
-    robot2->robotMovel(cartonPosition_05m, acceleration, velocity, time, r); // 货物上方一米
+    robot2->robotLinearMove(cartonPosition_05m, acceleration, velocity, time, r); // 货物上方一米
     sleep(5);
 
     // 9. 移动到准备抓取位置
@@ -182,7 +182,7 @@ int main()
         return -1;
     }
     // 移动
-    robot2->robotMove(degrees, acceleration, velocity, time, r); // 准备抓取位置
+    robot2->robotJointMove(degrees, acceleration, velocity, time, r); // 准备抓取位置
     sleep(5);
 
     // 10. 复位
@@ -195,5 +195,5 @@ int main()
         return -1;
     }
     // 移动
-    robot2->robotMove(degrees, acceleration, velocity, time, r); // 复位摆放位置
+    robot2->robotJointMove(degrees, acceleration, velocity, time, r); // 复位摆放位置
 }

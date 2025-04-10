@@ -64,7 +64,7 @@ int main()
     //     double time = 0;
     //     double r = 0;
 
-    //     robot2->robotMove(degrees, acceleration, velocity, time, r);
+    //     robot2->robotJointMove(degrees, acceleration, velocity, time, r);
     // }
 
     ////////////////////////////////直接给角度控制///////////////////////////////////////////
@@ -100,12 +100,12 @@ int main()
     double velocity = 0.5;
     double time = 0;
     double r = 0;
-    robot2->robotMove(degreeReset, acceleration, velocity, time, r);    // 复位
+    robot2->robotJointMove(degreeReset, acceleration, velocity, time, r);    // 复位
     sleep(10);
 
-    robot2->robotMove(degreeGrasp1, acceleration, velocity, time, r);    // 复位
+    robot2->robotJointMove(degreeGrasp1, acceleration, velocity, time, r);    // 复位
     sleep(3);
-    robot2->robotMove(degreeGrasp2, acceleration, velocity, time, r);    // 复位
+    robot2->robotJointMove(degreeGrasp2, acceleration, velocity, time, r);    // 复位
 
     ///////////////////////////////////////////////////////////////////////
 }
