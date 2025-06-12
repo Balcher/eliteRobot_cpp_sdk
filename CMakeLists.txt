@@ -74,3 +74,4 @@ endif()
 
 add_subdirectory(${PROJECT_SOURCE_DIR}/CppSample/)
 add_subdirectory(${PROJECT_SOURCE_DIR}/HandEyeCalib/)
+add_subdirectory(${PROJECT_SOURCE_DIR}/RTSI_cpp_sample/)
