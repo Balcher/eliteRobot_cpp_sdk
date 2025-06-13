@@ -81,13 +81,4 @@ private:
      */
     Eigen::Matrix4d forwardKinematics(const std::vector<double> &joint_positions);
 
-    // TODO: 有TCP偏移情况，这个正向运动学怎么解决
-    /**
-     * @brief Get the Tcp Transformation Matrix object
-     *
-     * @param joint_positions
-     * @return Eigen::Matrix4d
-     */
-    Eigen::Matrix4d getTcpTransformationMatrix(const std::vector<double> &joint_positions);
-
 };

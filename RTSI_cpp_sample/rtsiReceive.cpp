@@ -17,7 +17,7 @@ RtsiReceive::RtsiReceive(const std::string &ip, int jointRate, int payloadRate)
     out_recipe2 = rt->outputSubscribe("timestamp,actual_joint_positions", jointRate);
     rt->sendTextMessage("New RTSI Connect", "RTSI CPP Client", Rtsi::MessageType::INFO_MESSAGE);
 
-    setTCPOffset(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+    setTCPOffset(0.0, -0.045, 0.065, 0.0, 0.0, 0.0);
 }
 
 RtsiReceive::~RtsiReceive()
@@ -79,7 +79,7 @@ void RtsiReceive::setTCPOffset(double x, double y, double z, double roll, double
 std::vector<double> RtsiReceive::getTcpPosition(const std::vector<double> &joint_positions)
 {
     // 欧拉角顺序是ZYX
-    Eigen::Matrix4d tcp_matrix = getTcpTransformationMatrix(joint_positions);
+    Eigen::Matrix4d tcp_matrix = forwardKinematics(joint_positions);
     return {tcp_matrix(0, 3), tcp_matrix(1, 3), tcp_matrix(2, 3),
             std::atan2(tcp_matrix(2, 1), tcp_matrix(2, 2)),                                                                      // roll
             std::atan2(-tcp_matrix(2, 0), std::sqrt(tcp_matrix(2, 1) * tcp_matrix(2, 1) + tcp_matrix(2, 2) * tcp_matrix(2, 2))), // pitch
@@ -89,10 +89,27 @@ std::vector<double> RtsiReceive::getTcpPosition(const std::vector<double> &joint
 Eigen::Matrix4d RtsiReceive::forwardKinematics(const std::vector<double> &joint_positions)
 {
     Eigen::Matrix4d T = Eigen::Matrix4d::Identity();
-    for (size_t i = 0; i < joint_positions.size(); i++)
+    for (size_t i = 0; i < 5; i++)
     {
         T = T * computeTransformationMatrix(dh_parameters[i], joint_positions[i]);
     }
+
+    // 处理末端TCP情况，相当于基于法兰坐标系做变换
+    Eigen::AngleAxisd rollAngle(tcp_offset_roll, Eigen::Vector3d::UnitX());
+    Eigen::AngleAxisd pitchAngle(tcp_offset_pitch, Eigen::Vector3d::UnitY());
+    Eigen::AngleAxisd yawAngle(tcp_offset_yaw, Eigen::Vector3d::UnitZ());
+    Eigen::Quaterniond q(yawAngle * pitchAngle * rollAngle);
+    Eigen::Matrix3d tcp_offset_rotation = q.toRotationMatrix();
+    Eigen::Vector3d tcp_offset_translation(tcp_offset_x, tcp_offset_y, tcp_offset_z);
+    Eigen::Matrix4d tcp_offset_transform = Eigen::Matrix4d::Identity();
+    tcp_offset_transform.block<3, 3>(0, 0) = tcp_offset_rotation;
+    tcp_offset_transform.block<3, 1>(0, 3) = tcp_offset_translation;
+    Eigen::Matrix4d T6 = computeTransformationMatrix(dh_parameters[5], joint_positions[5]);
+    T6 = T6 * tcp_offset_transform;
+
+    // 整体的再乘 T6
+    T = T * T6;
+
     return T;
 }
 
@@ -104,15 +121,5 @@ Eigen::Matrix4d RtsiReceive::computeTransformationMatrix(const DHParameters &dh_
         sin(theta) * cos(dh_parameters.alpha), cos(theta) * cos(dh_parameters.alpha), -sin(dh_parameters.alpha), -dh_parameters.d * sin(dh_parameters.alpha),
         sin(theta) * sin(dh_parameters.alpha), cos(theta) * sin(dh_parameters.alpha), cos(dh_parameters.alpha), dh_parameters.d * cos(dh_parameters.alpha),
         0, 0, 0, 1;
-    return T;
-}
-
-Eigen::Matrix4d RtsiReceive::getTcpTransformationMatrix(const std::vector<double> &joint_positions)
-{
-    // 计算正向运动学
-    Eigen::Matrix4d T = forwardKinematics(joint_positions);
-
-    // TODO：TCP带有偏移情况怎么处理
-
     return T;
 }
