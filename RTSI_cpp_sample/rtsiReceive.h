@@ -39,7 +39,7 @@ public:
     void setTCPOffset(double x, double y, double z, double roll, double pitch, double yaw);
 
     /** 
-     * @brief Get the Tcp Position object（只能TCP不带偏移情况）
+     * @brief Get the Tcp Position object
      *
      * @param joint_positions
      * @return std::vector<double> (m,rad)
