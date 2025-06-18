@@ -1,3 +1,15 @@
+/**
+ * @note：
+ * 关节角度设置了一个线程来获取，线程的延迟时间是更新时间的1/10,
+ * 关节角度有变化情况设置了回调函数用来获取角度的更新
+ * 负载质量和重心位置未做处理
+ *
+ * 获取关节角度的接口：
+ * 1. 同步获取接口，（GetActualJointPositions）能够实时获取关节角度。
+ * 2. 异步获取接口，通过回调函数（setEventDrivenJointUpdataCallback）来异步获取角度，事件驱动的，关节角度有变化才会更新
+ * 3. 异步获取接口，通过回调函数(setRealTimeJointUpdataCallback)，异步实时获取角度
+ *
+ */
 #pragma once
 
 #include "Rtsi.hpp"    // RTSI接口头文件
@@ -6,7 +18,8 @@
 #include <thread>      // 线程库
 #include <chrono>      // 时间库
 #include <Eigen/Dense> // Eigen库，用于处理向量和矩阵
-
+#include <functional>  // 用于std::function
+#include <mutex>       // 互斥锁
 struct DHParameters
 {
     double d;     // 连杆偏移
@@ -17,14 +30,17 @@ struct DHParameters
 class RtsiReceive
 {
 public:
+    // 定义回调函数类型
+    using JointUpdataCallback = std::function<void(const std::vector<double> &)>;
+
     RtsiReceive() = default;
     explicit RtsiReceive(const std::string &ip, int jointRate = 100, int payloadRate = 100);
     ~RtsiReceive();
 
     void RtsiStart();
     void RtsiStop();
-    std::vector<double> GetActualJointPositions();
-    std::vector<double> GetPayloadCog();
+    std::vector<double> GetActualJointPositions(); // 同步获取当前关节角
+    std::vector<double> GetPayloadCog();           // 负载质量和重心位置 // TODO： 能否正常使用未知
 
     /**
      * @brief 设置TCP偏移
@@ -38,7 +54,7 @@ public:
      */
     void setTCPOffset(double x, double y, double z, double roll, double pitch, double yaw);
 
-    /** 
+    /**
      * @brief Get the Tcp Position object
      *
      * @param joint_positions
@@ -46,14 +62,37 @@ public:
      */
     std::vector<double> getTcpPosition(const std::vector<double> &joint_positions);
 
+    /**
+     * @brief 设置关节更新回调函数（异步获取关节角度，关节变化才会触发）
+     *
+     * @param callback 回调函数
+     */
+    void setEventDrivenJointUpdataCallback(JointUpdataCallback callback);
+
+    /**
+     * @brief 设置实时的关节更新回调函数
+     *
+     * @param callback 回调函数
+     */
+    void setRealTimeJointUpdataCallback(JointUpdataCallback callback);
+
 private:
-    std::unique_ptr<Rtsi> rt;        // RTSI连接对象
-    Rtsi::DataRecipePtr out_recipe1; // 订阅负载质量和重心位置
-    Rtsi::DataRecipePtr out_recipe2; // 订阅时间戳和实际关节位置
+    std::unique_ptr<Rtsi> rt;                   // RTSI连接对象
+    Rtsi::DataRecipePtr out_recipe1;            // 订阅负载质量和重心位置
+    Rtsi::DataRecipePtr out_recipe2;            // 订阅时间戳和实际关节位置
+    std::vector<double> m_last_joint_positions; // 缓存上一次的数据
+    int m_jointRate;                            // 关节获取速率
+
+    std::thread m_update_thread; // 子线程
+    bool m_running = false;      // 线程运行标志
+    std::mutex m_mutex;          // 互斥锁
 
     double tcp_offset_x, tcp_offset_y, tcp_offset_z;          // TCP偏移量
     double tcp_offset_roll, tcp_offset_pitch, tcp_offset_yaw; // TCP偏移角度
 
+    // 回调函数
+    JointUpdataCallback event_driven_joint_update_callback;
+    JointUpdataCallback real_time_joint_update_callback;
     // 固定的DH参数
     std::vector<DHParameters> dh_parameters = {
         {0.235, 0.0, 0.0},     // d1, a1, alpha1
@@ -81,4 +120,9 @@ private:
      */
     Eigen::Matrix4d forwardKinematics(const std::vector<double> &joint_positions);
 
+    /**
+     * @brief 子线程更新关节角度并触发回调
+     *
+     */
+    void updateJointPosition();
 };

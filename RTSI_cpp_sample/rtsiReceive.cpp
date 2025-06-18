@@ -2,6 +2,7 @@
 
 RtsiReceive::RtsiReceive(const std::string &ip, int jointRate, int payloadRate)
 {
+    m_jointRate = jointRate;
     rt = std::make_unique<Rtsi>();
     if (!rt->connect(ip))
     {
@@ -23,32 +24,31 @@ RtsiReceive::RtsiReceive(const std::string &ip, int jointRate, int payloadRate)
 RtsiReceive::~RtsiReceive()
 {
     RtsiStop();
+    if(m_update_thread.joinable())
+    {
+        m_update_thread.join();
+    }
+    std::cout << "RtsiReceive Destructor" << std::endl;
 }
 
 void RtsiReceive::RtsiStart()
 {
     rt->start();
+    m_running = true;
+    m_update_thread = std::thread(&RtsiReceive::updateJointPosition, this);
 }
 
 void RtsiReceive::RtsiStop()
 {
+    m_running = false;
     rt->pause();
     rt->disconnect();
 }
 
 std::vector<double> RtsiReceive::GetActualJointPositions()
 {
-    Rtsi::DataRecipePtr &recipe = rt->getOutputDataToRecipe();
-    if (recipe->getID() == out_recipe2->getID())
-    {
-        std::vector<double> joint_positions;
-        for (size_t i = 0; i < 6; i++)
-        {
-            joint_positions.push_back((*recipe)["actual_joint_positions"].value.v6d[i]);
-        }
-        return joint_positions;
-    }
-    return {};
+    std::lock_guard<std::mutex> lock(m_mutex);
+    return m_last_joint_positions;
 }
 
 std::vector<double> RtsiReceive::GetPayloadCog()
@@ -86,6 +86,16 @@ std::vector<double> RtsiReceive::getTcpPosition(const std::vector<double> &joint
             std::atan2(tcp_matrix(1, 0), tcp_matrix(0, 0))};                                                                     // yaw
 }
 
+void RtsiReceive::setEventDrivenJointUpdataCallback(JointUpdataCallback callback)
+{
+    event_driven_joint_update_callback = callback;
+}
+
+void RtsiReceive::setRealTimeJointUpdataCallback(JointUpdataCallback callback)
+{
+    real_time_joint_update_callback = callback;
+}
+
 Eigen::Matrix4d RtsiReceive::forwardKinematics(const std::vector<double> &joint_positions)
 {
     Eigen::Matrix4d T = Eigen::Matrix4d::Identity();
@@ -111,6 +121,39 @@ Eigen::Matrix4d RtsiReceive::forwardKinematics(const std::vector<double> &joint_
     T = T * T6;
 
     return T;
+}
+
+void RtsiReceive::updateJointPosition()
+{
+    while(m_running)
+    {
+        Rtsi::DataRecipePtr &recipe = rt->getOutputDataToRecipe();
+        if (recipe->getID() == out_recipe2->getID())
+        {
+            std::lock_guard<std::mutex> lock(m_mutex);
+            std::vector<double> new_joint_positions;
+            for (size_t i = 0; i < 6; i++)
+            {
+                new_joint_positions.push_back((*recipe)["actual_joint_positions"].value.v6d[i]);
+            }
+
+            if(new_joint_positions != m_last_joint_positions)
+            {
+                m_last_joint_positions = new_joint_positions;
+                // 触发回调函数
+                if(event_driven_joint_update_callback)
+                {
+                    event_driven_joint_update_callback(m_last_joint_positions);
+                }
+            }
+
+            if(real_time_joint_update_callback)
+            {
+                real_time_joint_update_callback(m_last_joint_positions);
+            }
+        }
+        std::this_thread::sleep_for(std::chrono::milliseconds(int(100/m_jointRate))); // 频率是更新频率的10倍
+    }
 }
 
 Eigen::Matrix4d RtsiReceive::computeTransformationMatrix(const DHParameters &dh_parameters, double theta)
