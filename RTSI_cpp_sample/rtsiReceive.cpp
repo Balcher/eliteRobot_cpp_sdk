@@ -24,7 +24,7 @@ RtsiReceive::RtsiReceive(const std::string &ip, int jointRate, int payloadRate)
 RtsiReceive::~RtsiReceive()
 {
     RtsiStop();
-    if(m_update_thread.joinable())
+    if (m_update_thread.joinable())
     {
         m_update_thread.join();
     }
@@ -96,6 +96,28 @@ void RtsiReceive::setRealTimeJointUpdataCallback(JointUpdataCallback callback)
     real_time_joint_update_callback = callback;
 }
 
+std::vector<std::vector<double>> RtsiReceive::getJointActualPosition(std::vector<double> degrees)
+{
+
+    Eigen::Matrix4d T1 = computeTransformationMatrix(dh_parameters[0], degrees[0]);
+    Eigen::Matrix4d T2 = computeTransformationMatrix(dh_parameters[1], degrees[1]);
+    Eigen::Matrix4d T3 = computeTransformationMatrix(dh_parameters[2], degrees[2]);
+    Eigen::Matrix4d T4 = computeTransformationMatrix(dh_parameters[3], degrees[3]);
+    Eigen::Matrix4d T5 = computeTransformationMatrix(dh_parameters[4], degrees[4]);
+    Eigen::Matrix4d T6 = computeTransformationMatrix(dh_parameters[5], degrees[5]);
+
+    std::vector<std::vector<double>> jointActualPos;
+
+    jointActualPos.push_back(matrixToVector(T1));
+    jointActualPos.push_back(matrixToVector(T2));
+    jointActualPos.push_back(matrixToVector(T3));
+    jointActualPos.push_back(matrixToVector(T4));
+    jointActualPos.push_back(matrixToVector(T5));
+    jointActualPos.push_back(matrixToVector(T6));
+
+    return jointActualPos;
+}
+
 Eigen::Matrix4d RtsiReceive::forwardKinematics(const std::vector<double> &joint_positions)
 {
     Eigen::Matrix4d T = Eigen::Matrix4d::Identity();
@@ -125,7 +147,7 @@ Eigen::Matrix4d RtsiReceive::forwardKinematics(const std::vector<double> &joint_
 
 void RtsiReceive::updateJointPosition()
 {
-    while(m_running)
+    while (m_running)
     {
         Rtsi::DataRecipePtr &recipe = rt->getOutputDataToRecipe();
         if (recipe->getID() == out_recipe2->getID())
@@ -137,23 +159,31 @@ void RtsiReceive::updateJointPosition()
                 new_joint_positions.push_back((*recipe)["actual_joint_positions"].value.v6d[i]);
             }
 
-            if(new_joint_positions != m_last_joint_positions)
+            if (new_joint_positions != m_last_joint_positions)
             {
                 m_last_joint_positions = new_joint_positions;
                 // 触发回调函数
-                if(event_driven_joint_update_callback)
+                if (event_driven_joint_update_callback)
                 {
                     event_driven_joint_update_callback(m_last_joint_positions);
                 }
             }
 
-            if(real_time_joint_update_callback)
+            if (real_time_joint_update_callback)
             {
                 real_time_joint_update_callback(m_last_joint_positions);
             }
         }
-        std::this_thread::sleep_for(std::chrono::milliseconds(int(100/m_jointRate))); // 频率是更新频率的10倍
+        std::this_thread::sleep_for(std::chrono::milliseconds(int(100 / m_jointRate))); // 频率是更新频率的10倍
     }
+}
+
+std::vector<double> RtsiReceive::matrixToVector(const Eigen::Matrix4d &matrix)
+{
+    return {matrix(0, 3), matrix(1, 3), matrix(2, 3),
+            std::atan2(matrix(2, 1), matrix(2, 2)),                                                          // roll
+            std::atan2(-matrix(2, 0), std::sqrt(matrix(2, 1) * matrix(2, 1) + matrix(2, 2) * matrix(2, 2))), // pitch
+            std::atan2(matrix(1, 0), matrix(0, 0))};
 }
 
 Eigen::Matrix4d RtsiReceive::computeTransformationMatrix(const DHParameters &dh_parameters, double theta)

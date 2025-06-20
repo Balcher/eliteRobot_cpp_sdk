@@ -27,6 +27,16 @@ struct DHParameters
     double alpha; // 连杆扭转角
 };
 
+// 固定的DH参数
+static std::vector<DHParameters> dh_parameters = {
+    {0.235, 0.0, 0.0},     // d1, a1, alpha1
+    {0.0, 0.0, M_PI_2},    // d2, a2, alpha2
+    {0.0, -0.9, 0.0},      // d3, a3, alpha3
+    {0.1725, -0.772, 0.0}, // d4, a4, alpha4
+    {0.128, 0.0, M_PI_2},  // d5, a5, alpha5
+    {0.125, 0.0, -M_PI_2}, // d6, a6, alpha6
+};
+
 class RtsiReceive
 {
 public:
@@ -76,6 +86,14 @@ public:
      */
     void setRealTimeJointUpdataCallback(JointUpdataCallback callback);
 
+    /**
+     * @brief 获取机械臂上面各关节位姿
+     *
+     * @param degrees 关节角度
+     * @return std::vector<std::vector<double>> 6*6矩阵，分别表示基座、肩部、肘部、手腕1、手腕2、手腕3的位姿
+     */
+    static std::vector<std::vector<double>> getJointActualPosition(std::vector<double> degrees);
+
 private:
     std::unique_ptr<Rtsi> rt;                   // RTSI连接对象
     Rtsi::DataRecipePtr out_recipe1;            // 订阅负载质量和重心位置
@@ -93,15 +111,6 @@ private:
     // 回调函数
     JointUpdataCallback event_driven_joint_update_callback;
     JointUpdataCallback real_time_joint_update_callback;
-    // 固定的DH参数
-    std::vector<DHParameters> dh_parameters = {
-        {0.235, 0.0, 0.0},     // d1, a1, alpha1
-        {0.0, 0.0, M_PI_2},    // d2, a2, alpha2
-        {0.0, -0.9, 0.0},      // d3, a3, alpha3
-        {0.1725, -0.772, 0.0}, // d4, a4, alpha4
-        {0.128, 0.0, M_PI_2},  // d5, a5, alpha5
-        {0.125, 0.0, -M_PI_2}, // d6, a6, alpha6
-    };
 
     /**
      * @brief 计算DH参数的变换矩阵
@@ -110,7 +119,7 @@ private:
      * @param theta     关节角度(弧度)
      * @return Eigen::Matrix4d 变换矩阵
      */
-    Eigen::Matrix4d computeTransformationMatrix(const DHParameters &dh_params, double theta);
+    static Eigen::Matrix4d computeTransformationMatrix(const DHParameters &dh_params, double theta);
 
     /**
      * @brief 计算正向运动学(不包括TCP偏移)
@@ -125,4 +134,12 @@ private:
      *
      */
     void updateJointPosition();
+
+    /**
+     * @brief 从Matrix4d形式解算成 xyz,rpy
+     *
+     * @param matrix
+     * @return std::vector<double>
+     */
+    static std::vector<double> matrixToVector(const Eigen::Matrix4d &matrix);
 };
