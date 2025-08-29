@@ -23,10 +23,21 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
         pthread
     )
 else()
-    target_link_libraries(
-        ${PROJECT_NAME}
-        elite_robot_state
-    )
+    if(WIN32)
+        target_link_libraries(
+            ${PROJECT_NAME}
+            PRIVATE
+            elite_robot_state
+            ws2_32
+        )
+    else()
+        target_link_libraries(
+            ${PROJECT_NAME}
+            PRIVATE
+            elite_robot_state
+        )
+    endif()
+
 endif()
 
 # socket通信测试

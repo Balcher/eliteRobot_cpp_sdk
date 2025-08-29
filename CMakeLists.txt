@@ -23,15 +23,26 @@ set(
     Robot40011Port.cpp
 )
 
-include_directories(
-    ${PROJECT_SOURCE_DIR}
-)
-
 add_library(
     elite_robot_state
     STATIC
     "${SOURCE_FILE}"
 )
+
+target_include_directories(
+    elite_robot_state
+    PUBLIC
+        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:include>
+)
+
+# add winsock
+if(WIN32)
+    target_link_libraries(elite_robot_state PRIVATE ws2_32)
+endif()
+
+set(INSTALL_LIB_DIR "lib" CACHE PATH "Directory for installing libraries")
+set(INSTALL_INCLUDE_DIR "include" CACHE PATH "Directory for installing header files")
 
 # 判断是否是 ROS 的 colcon 构建环境
 if(DEFINED ENV{COLCON_PREFIX_PATH})
@@ -48,7 +59,7 @@ if(DEFINED ENV{COLCON_PREFIX_PATH})
 
     # 安装头文件到 ROS 的 install/include 目录
     install(
-        DIRECTORY ${PROJECT_SOURCE_DIR}/
+        DIRECTORY ${PROJECT_SOURCE_DIR}/include
         DESTINATION include
         FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp" PATTERN "*.txt"
     )
@@ -59,19 +70,34 @@ else()
     # 安装库文件到默认的 CMake 安装路径
     install(
         TARGETS elite_robot_state
-        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        # ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        # LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        # RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        ARCHIVE DESTINATION ${INSTALL_LIB_DIR}
     )
 
     # 安装头文件到默认的 CMake 安装路径
     install(
-        DIRECTORY ${PROJECT_SOURCE_DIR}/
-        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+        DIRECTORY ${PROJECT_SOURCE_DIR}/include
+        # DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+        DESTINATION ${INSTALL_INCLUDE_DIR}
         FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp"
+    )
+
+    install(FILES
+        ${PROJECT_SOURCE_DIR}/RobotState.hpp
+        ${PROJECT_SOURCE_DIR}/RobotException.hpp
+        ${PROJECT_SOURCE_DIR}/RobotInterface.hpp
+        ${PROJECT_SOURCE_DIR}/Robot40011Port.hpp
+        ${PROJECT_SOURCE_DIR}/CS_UserManual_Robot_State_Message.txt
+        DESTINATION ${INSTALL_INCLUDE_DIR}
     )
 endif()
 
-add_subdirectory(${PROJECT_SOURCE_DIR}/CppSample/)
-add_subdirectory(${PROJECT_SOURCE_DIR}/HandEyeCalib/)
-add_subdirectory(${PROJECT_SOURCE_DIR}/RTSI_cpp_sample/)
+option(BUILD_DEMOS "Build demo/test programs" OFF)
+
+if(BUILD_DEMOS)
+    add_subdirectory(${PROJECT_SOURCE_DIR}/CppSample)
+    add_subdirectory(${PROJECT_SOURCE_DIR}/HandEyeCalib)
+    add_subdirectory(${PROJECT_SOURCE_DIR}/RTSI_cpp_sample)
+endif()
